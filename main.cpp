@@ -11,7 +11,8 @@
 #include"iostream"
 #include"json/json.h"
 #include"model/UserModel.h"
-
+#include"model/UserMessageModel.h"
+#include"model/UnreadUserMessageModel.h"
 int main(int argc,char **argv)
 {
        // 设置日志级别为TRACE 
@@ -23,14 +24,20 @@ int main(int argc,char **argv)
   LOG_INFO << "info level log message";
   LOG_WARN << "warn level log message";
   LOG_ERROR << "error level log message";
-     int x;
-     int xxxx;
+
+
        User ass(1,"2","2","3");
        UserModel().insert(ass);
       User awww= UserModel().query(1);
       awww.setState(true);
       UserModel().update_state(awww);
       UserModel().reset_state();
+
+
+      UserMessage test_message(1,"你是啥比","2000-10-05",awww.getId(),awww.getId());
+      UserMessageModel().insert(test_message);
+      UserMessage test_message2=   UserMessageModel().query(1);
+      UserMessageModel().delete_UserMessage(1);
        Json::Value a;
        a["woain"]="dasdas";   
       std::cout<<woaini111(); 

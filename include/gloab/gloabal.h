@@ -27,6 +27,7 @@ enum class JsonMessage{
     ADD_GROUP_MSG,    //加入群聊
     GROUP_CHAT_MSG,   //群聊消息
     LOGINOUT_MSG,   //注销消息
+    
 };
 cppdb::session db_connector(cppdb::pool::pointer&);
 std::string woaini111();
