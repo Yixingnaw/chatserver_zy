@@ -23,7 +23,7 @@ int main(int argc,char **argv)
   LOG_INFO << "info level log message";
   LOG_WARN << "warn level log message";
   LOG_ERROR << "error level log message";
-
+     int x;
        User ass(1,"2","2","3");
        UserModel().insert(ass);
       User awww= UserModel().query(1);
