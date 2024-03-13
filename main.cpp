@@ -18,9 +18,10 @@ int main(int argc,char **argv)
 {
        // 设置日志级别为TRACE 
   muduo::Logger::setLogLevel(muduo::Logger::TRACE);
+
  
       auto sql=db_connector(my_pool);//不写上会链接不上为啥
-       User ass(1,"2","2","3");
+
        UserModel().insert(ass);
       User awww= UserModel().query(1);
       awww.setState(true);
