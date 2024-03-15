@@ -2,21 +2,21 @@
 #define USERMESSAGE_H
 
 #include <string>
-
+#include<vector>
 class UserMessage {
 private:
-    int UserMessageID;
     std::string Content;
     std::string SendTime;
     int SenderID;
     int ReceiverID;
+        int UserMessageID;
    // bool IsRead;
 public:
     // 构造函数
-    UserMessage(int id, const std::string& content, const std::string& date="1999-08-05",
-                int senderID=0, int receiverID=0)
-        : UserMessageID(id), Content(content), SendTime(date),
-         SenderID(senderID), ReceiverID(receiverID)  {}
+    UserMessage(const std::string& content, const std::string& date="1999-08-05",
+                int senderID=0, int receiverID=0,int id=1)
+        : Content(content), SendTime(date),
+         SenderID(senderID), ReceiverID(receiverID) ,UserMessageID(id) {}
      UserMessage(){
         UserMessageID=-1;
      }

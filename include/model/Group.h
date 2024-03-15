@@ -5,14 +5,14 @@
 
 class Group {
 private:
-    int GroupID;
+   
     std::string GroupName;
     std::string Description;
-
+     int GroupID;
 public:
     // 构造函数
-    inline Group(int id, const std::string& groupName, const std::string& description)
-        : GroupID(id), GroupName(groupName), Description(description) {}
+    inline Group(const std::string& groupName, const std::string& description,int id=1)
+        : GroupName(groupName), Description(description),GroupID(id){}
     Group(){
         GroupID=-1;
     }

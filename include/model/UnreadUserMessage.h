@@ -3,20 +3,19 @@
 
 class UnreadUserMessage {
 private:
-    int UnreadUserMessageID;
     int ReceiverID;
     int UserMessageID;
-
+     int UnreadUserMessageID;
 public:
     // 构造函数
-    inline UnreadUserMessage(int id, int receiverID, int userMessageID)
-        : UnreadUserMessageID(id), ReceiverID(receiverID), UserMessageID(userMessageID) {}
+    inline UnreadUserMessage( int receiverID, int userMessageID,int id=1)
+        : ReceiverID(receiverID), UserMessageID(userMessageID),UnreadUserMessageID(id) {}
      UnreadUserMessage(){
         UnreadUserMessageID=-1;
      }
     // 获取未读消息ID
     inline int getUnreadMessageID() const { return UnreadUserMessageID; }
-
+    
     // 获取接收者ID
     inline int getReceiverID() const { return ReceiverID; }
 

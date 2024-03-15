@@ -6,7 +6,7 @@
 class User {
 public:
     // 构造函数
-    User(int id, const std::string& password, const std::string& username, const std::string& personalSignature);
+    User(const std::string& password, const std::string& username, const std::string& personalSignature,int id);
      User();
     // 获取用户ID
     int getId() const;
@@ -39,19 +39,20 @@ public:
     void setState(bool state);
 
 private:
-    int id_; // 用户ID
+ 
     std::string password_; // 密码
     std::string username_; // 用户名
     std::string personalSignature_; // 个人签名
     bool state_; // 用户状态
+       int id_; // 用户ID
 };
 inline User::User(){
     id_=-1;
 }
 
 // 构造函数
- inline User::User(int id, const std::string& password, const std::string& username, const std::string& personalSignature)
-    : id_(id), password_(password), username_(username), personalSignature_(personalSignature) {}
+ inline User::User(const std::string& password, const std::string& username, const std::string& personalSignature,int id=1)
+    : password_(password), username_(username), personalSignature_(personalSignature),id_(id) {}
 
 // 获取用户ID
 inline int User::getId() const {
