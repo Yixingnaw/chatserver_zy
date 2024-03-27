@@ -50,15 +50,14 @@ set(CMAKE_LIBRARY_PATH ${CMAKE_LIBRARY_PATH} ${Muduo_LIBRARY_DIR})
 
 include_directories(${Muduo_INCLUDE_DIR})
 
-find_library(muduo_base muduo_base)
 find_library(muduo_net muduo_net)
-#message(STATUS ${muduo_base})
-#message(STATUS ${muduo_net})
+message(STATUS "muduo_net: ${muduo_net}")
+find_library(muduo_base muduo_base)
+message(STATUS "muduo_base: ${muduo_base}")
 
 find_package(Boost REQUIRED)
 include_directories(${Boost_INCLUDE_DIRS})
 #前面都是找到muduo库头文件，和对应的muduo库与boost库
-
 
 
 include_directories(${PROJECT_SOURCE_DIR})
@@ -76,12 +75,14 @@ add_subdirectory(src/service)
 #添加server_chat目录
 add_subdirectory(src/server_chat)
 
-
 target_link_libraries(server ${muduo_net})
 target_link_libraries(server ${muduo_base})
+
 target_link_libraries(server pthread rt)
+
 target_link_libraries(server mysqlclient)
 target_link_libraries(server cppdb)
+
 target_link_libraries(server model)#model层
 target_link_libraries(server server_chat)
 target_link_libraries(server service)

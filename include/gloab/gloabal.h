@@ -12,11 +12,16 @@
 #include"cppdb/ref_ptr.h"
 #include"cppdb/shared_object.h"
 #include"cppdb/utils.h"
-#include <muduo/base/Logging.h>
+#include "muduo/base/AsyncLogging.h"
+#include "muduo/base/Logging.h"
+#include "muduo/base/Thread.h"
+#include "muduo/net/EventLoop.h"
+#include "muduo/net/InetAddress.h"
+#include "muduo/net/TcpServer.h" 
 #include"json/json.h"
 
 /*用来注册不同的回调函数*/
-enum class JsonMessage{
+enum class ServerMessage{
     LOGIN_MSG = 1,  //登录消息，绑定login
     LOGIN_MSG_ACK,  //登录响应消息
     REG_MSG,        //注册消息，绑定regist

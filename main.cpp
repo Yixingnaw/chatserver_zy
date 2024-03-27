@@ -1,10 +1,4 @@
-
-#include "muduo/base/AsyncLogging.h"
-#include "muduo/base/Logging.h"
-#include "muduo/base/Thread.h"
-#include "muduo/net/EventLoop.h"
-#include "muduo/net/InetAddress.h"
-#include "muduo/net/TcpServer.h" 
+#include"gloab/chatServer.h"
 #include"gloab/gloabal.h"
 #include"gloab/server.h"
 #include"model/User.h"
@@ -15,22 +9,31 @@
 #include"model/UnreadUserMessageModel.h"
 #include"model/GroupModel.h"
 #include"model/FriendshipModel.h"
-
-int main(int argc,char **argv)
+#include"service/LoginService.h"
+#include"service/RegistService.h"
+    
+    
+int main()
 {
-       // 设置日志级别为TRACE 
-  muduo::Logger::setLogLevel(muduo::Logger::DEBUG);
+       muduo::Logger::setLogLevel(muduo::Logger::DEBUG);
 
  
       auto sql=db_connector(my_pool);//不写上会链接不上为啥
-     User ass("3,","23","2312",2);
+   //这下面这一段必须先用来写上，不然会报链接错误，找不到muduonet库
+    EventLoop loop; //epoll
+    InetAddress addr("127.0.0.1", 6000);
+    ChatServer server(&loop, addr, "ChatServer");
+    server.start(); //启动服务：listenfd通过epoll_ctl添加到epoll上
+    loop.loop(); //类似于epoll_wait以阻塞的方式等待新用户连接或处理已连接用户的读写事件
+    //接上面一段
+    
+    User ass("3,","23","2312",2);
        UserModel().insert(ass);
       User awww= UserModel().query(1);
       awww.setState(true);
       UserModel().update_state(awww);
       UserModel().reset_state();
-
-
+      
       //UserMessageModel().delete_UserMessage(1);
        Json::Value a;
        a["woain"]="dasdas";   
@@ -67,11 +70,7 @@ int main(int argc,char **argv)
     UnreadUserMessageModel().insert(testunreadusemessage);
       auto vec__back__int=  UnreadUserMessageModel().query(ass.getId());
       UnreadUserMessageModel().delete_UnreadUserMessage(ass.getId());
-
-
-
     std::cout<<"test";
-
-    
-	return 0;
+    RegistService();
+    return 0;
 }

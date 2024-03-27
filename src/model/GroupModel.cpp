@@ -121,7 +121,7 @@ std::map<Group,std::vector<GroupMember>> GroupModel::query_group(User& user){
       } catch(std::exception const &e) {
                 LOG_ERROR<< "ERROR: " << e.what() ;
                 //异常终止程序
-              
+              return map_;
               }
 
 
