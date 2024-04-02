@@ -18,5 +18,7 @@ public:
 
     //重置用户状态信息
     bool reset_state();
+
+    bool is_hava_user(User user);
 };
 #endif

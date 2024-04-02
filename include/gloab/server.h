@@ -7,6 +7,8 @@
 #include "muduo/net/EventLoop.h"
 #include "muduo/net/InetAddress.h"
 #include "muduo/net/TcpServer.h" 
+#include"gloab/gloabal.h"
+#include"model/User.h"
 #include<string>
 using namespace muduo;
 using namespace muduo::net;
@@ -21,6 +23,7 @@ public:
     //启动服务
     void start();
 
+  
 private:
     //上报连接相关信息的回调函数
     void on_connection(const TcpConnectionPtr &);
@@ -31,6 +34,9 @@ private:
 private:
     TcpServer server_; //组合的muduo库，实现服务器功能的类对象
     EventLoop *loop_;  //指向事件循环对象的指针
+
+
+
 };
 
 #endif

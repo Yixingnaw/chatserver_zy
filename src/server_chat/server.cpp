@@ -58,7 +58,5 @@ void Server::on_message(const TcpConnectionPtr &conn, Buffer *buffer, Timestamp 
               //其实这个msg_handler就是login或者regist
    // msg_handler(conn, js["msg_value"], time);
   }
-
-    
     
 }

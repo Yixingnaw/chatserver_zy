@@ -37,7 +37,8 @@ public:
 
     // 设置用户状态
     void setState(bool state);
-
+    
+    bool operator==(const User&x);
 private:
  
     std::string password_; // 密码
@@ -45,6 +46,7 @@ private:
     std::string personalSignature_; // 个人签名
     bool state_; // 用户状态
        int id_; // 用户ID
+
 };
 inline User::User(){
     id_=-1;
@@ -103,5 +105,9 @@ inline bool User::getState() const {
 inline void User::setState(bool state) {
     state_ = state;
 }
+
+   inline bool User::operator==(const User&x){
+      return id_==x.getId();
+   }
 
 #endif // USER_H

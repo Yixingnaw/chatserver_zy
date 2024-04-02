@@ -19,7 +19,11 @@
 #include "muduo/net/InetAddress.h"
 #include "muduo/net/TcpServer.h" 
 #include"json/json.h"
-
+#include"model/User.h"
+#include <iostream>
+#include <vector>
+#include <thread>
+#include <shared_mutex>
 /*用来注册不同的回调函数*/
 enum class ServerMessage{
     LOGIN_MSG = 1,  //登录消息，绑定login
@@ -37,5 +41,83 @@ enum class ServerMessage{
 cppdb::session db_connector(cppdb::pool::pointer&);
 std::string woaini111();
 extern   cppdb::pool::pointer my_pool;
+
+
+template<typename T>
+class ThreadSafeVector {
+private:
+    std::vector<T> vec;
+    mutable std::shared_mutex mtx; // 读写锁
+
+public:
+    void push_back(const T& value) {
+        std::unique_lock<std::shared_mutex> lock(mtx);
+        vec.push_back(value);
+    }
+
+    T at(size_t index) const {
+        std::shared_lock<std::shared_mutex> lock(mtx);
+        return vec.at(index);
+    }
+
+    size_t size() const {
+        std::shared_lock<std::shared_mutex> lock(mtx);
+        return vec.size();
+    }
+
+    bool empty() const {
+        std::shared_lock<std::shared_mutex> lock(mtx);
+        return vec.empty();
+    }
+
+    T front() const {
+        std::shared_lock<std::shared_mutex> lock(mtx);
+        return vec.front();
+    }
+
+    T back() const {
+        std::shared_lock<std::shared_mutex> lock(mtx);
+        return vec.back();
+    }
+
+    bool pop_back() {
+        std::unique_lock<std::shared_mutex> lock(mtx);
+        if (vec.empty()) {
+            return false;
+        }
+        vec.pop_back();
+        return true;
+    }
+
+    T operator[](size_t index) const {
+        std::shared_lock<std::shared_mutex> lock(mtx);
+        return vec[index];
+    }
+
+    bool erase(size_t index) {
+        std::unique_lock<std::shared_mutex> lock(mtx);
+        if (index < 0 || index >= vec.size()) {
+            return false;
+        }
+        vec.erase(vec.begin() + index);
+        return true;
+    }
+
+    void clear() {
+        std::unique_lock<std::shared_mutex> lock(mtx);
+        vec.clear();
+    }
+    bool find(const T& value){
+      std::unique_lock<std::shared_mutex> lock(mtx);
+      auto it=  std::find(vec.begin(),vec.end(),value);
+      if (it != vec.end()) {
+             return true;          
+        }   
+       else {
+         return false;
+     }
+    }
+};
+extern   ThreadSafeVector<User> gloabal_users;
 
 #endif

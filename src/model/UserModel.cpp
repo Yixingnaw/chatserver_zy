@@ -86,3 +86,22 @@ bool UserModel::reset_state()
         }
         return false;
 }
+
+
+bool   UserModel::is_hava_user(User user){
+
+          try {
+         auto sql=db_connector(my_pool);
+          cppdb::result res;
+          res=sql << "SELECT * FROM User WHERE UserID=? AND Password=?" << user.getId()<<user.getPassword() << cppdb::row;
+          if(!res.empty()) {
+               return true;
+           }
+        else return false;         
+
+      } catch(std::exception const &e) {
+                LOG_ERROR<< "ERROR: " << e.what() ;
+                //异常终止程序
+                return false;
+              }
+}

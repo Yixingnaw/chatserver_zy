@@ -3,17 +3,19 @@
 #include <iostream>
 #include <functional>
 #include <string>
-using namespace std;
+
 using namespace muduo;
 using namespace muduo::net;
-using namespace placeholders;
-
+using namespace std::placeholders;
 //基于muduo网络库开发服务器程序
 class ChatServer
 {
+
+
+
 public:
     //3、明确TcpServer构造函数需要的参数，输出服务器对应类的构造函数
-    ChatServer(EventLoop *loop, const InetAddress &listenAddr, const string &nameArg) //事件循环、IP+port、服务器名字
+    ChatServer(EventLoop *loop, const InetAddress &listenAddr, const std::string &nameArg) //事件循环、IP+port、服务器名字
     : _server(loop, listenAddr, nameArg), _loop(loop)
     {
         //4.1、注册用户连接的创建和断开事件的回调
@@ -38,11 +40,11 @@ private:
     {
         if (conn->connected())
         {
-            cout << conn->peerAddress().toIpPort() << " -> " << conn->localAddress().toIpPort() << "state:online" << endl;
+           std::cout << conn->peerAddress().toIpPort() << " -> " << conn->localAddress().toIpPort() << "state:online" << std::endl;
         }
         else
         {
-            cout << conn->peerAddress().toIpPort() << " -> " << conn->localAddress().toIpPort() << "state:offline" << endl;
+          std::cout << conn->peerAddress().toIpPort() << " -> " << conn->localAddress().toIpPort() << "state:offline" << std::endl;
             conn->shutdown(); //连接断开将socket资源释放
             //或者调用_loop->quit()退出epoll;
         }
@@ -51,8 +53,8 @@ private:
     //4.2 专门处理用户读写事件
     void onMessage(const TcpConnectionPtr &conn, Buffer *buffer, Timestamp time) //连接、缓冲区、接收到数据的事件信息
     {
-        string buf = buffer->retrieveAllAsString(); //将接收数据全部放入字符串中
-        cout << "recv data:" << buf << " time:" << time.toString() << endl;
+        std::string buf = buffer->retrieveAllAsString(); //将接收数据全部放入字符串中
+        std::cout << "recv data:" << buf << " time:" << time.toString() << std::endl;
         conn->send(buf); //收到什么数据发回去什么数据
     }
 
