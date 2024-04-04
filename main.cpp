@@ -12,7 +12,7 @@
 #include"service/LoginService.h"
 #include"service/RegistService.h"
     
-    
+#include"service/service.h"
 int main()
 {
        muduo::Logger::setLogLevel(muduo::Logger::DEBUG);
@@ -35,7 +35,11 @@ int main()
       
       //UserMessageModel().delete_UserMessage(1);
        Json::Value a;
-       a["woain"]="dasdas";   
+       Json::Value json_array;
+       a["woain"]="dasdas";  
+          json_array.append(a);
+           Json::Value json_arraya;
+           json_arraya["sss"]=json_array;
       std::cout<<woaini111()<<std::endl; 
       
       Group  test_group("1112321","222",3);
@@ -85,6 +89,9 @@ int main()
       //这下面这一段必须先用来写上，不然会报链接错误，找不到muduonet库
     EventLoop loop; //epoll
     InetAddress addr("127.0.0.1", 6000);
+    InetAddress addr2("127.0.0.1", 9999);
+    Server server2(&loop,addr2,"chatserver2");
+    server2.start();
     ChatServer server(&loop, addr, "ChatServer");
     server.start(); //启动服务：listenfd通过epoll_ctl添加到epoll上
     loop.loop(); //类似于epoll_wait以阻塞的方式等待新用户连接或处理已连接用户的读写事件

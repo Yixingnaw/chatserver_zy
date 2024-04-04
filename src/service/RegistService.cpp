@@ -7,7 +7,7 @@ RegistService::RegistService(/* args */)
 RegistService::~RegistService()
 {
 }
-void  RegistService::operator()(const TcpConnectionPtr &conn, Json::Value &js, Timestamp time){
+void  RegistService::operator()(const TcpConnectionPtr &conn, Json::Value &js, Timestamp time)const{
        User user;
        user.setPassword(js["Password"].asString());
        user.setPersonalSignature(js["PersonalSignature"].asString());

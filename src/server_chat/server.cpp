@@ -2,7 +2,7 @@
 #include <string>
 #include <iostream>
 #include "gloab/server.h"
-//#include "ChatService.hpp"
+#include "service/ChatService.h"
 #include "json/json.h"
 using namespace muduo;
 using namespace muduo::net;
@@ -53,10 +53,10 @@ void Server::on_message(const TcpConnectionPtr &conn, Buffer *buffer, Timestamp 
   {
    //解耦网络和业务模块的代码
     //通过js里面的msgid，绑定msgid的回调函数，获取业务处理器handler
-   // auto msg_handler = ChatService::instance()->get_handler(js["msg_id"].get<int>());//返回service对象
-        
+    auto  msg_handler= ChatService::instance().get_handler(root["msg_id"].asInt());//返回service对象
+
               //其实这个msg_handler就是login或者regist
-   // msg_handler(conn, js["msg_value"], time);
+       (*msg_handler)(conn, root["msg_value"], time);
   }
     
 }

@@ -4,14 +4,16 @@
 using namespace std;
 
 bool  GroupModel::create_group(Group &x){
+     //注意创建群表之后还必须要操作从表
      try {
          auto sql=db_connector(my_pool);
            cppdb::statement stat;
                stat = sql << 
                         "INSERT INTO `Group`(GroupName,Description) "//说多了都是泪！！注意表名插入反引号！！
                         "VALUES(?,?)"
-                        << x.getGroupName()<< x.getDescription()  ;
+                        << x.getGroupName()<< x.getDescription() ;
                 stat.exec();
+                
                return true;              
 
       } catch(std::exception const &e) {
@@ -115,8 +117,7 @@ std::map<Group,std::vector<GroupMember>> GroupModel::query_group(User& user){
                     }
                map_.emplace(group_x,groupmenber_vec);
            }
-             return map_;
-                 
+             return map_;               
 
       } catch(std::exception const &e) {
                 LOG_ERROR<< "ERROR: " << e.what() ;
