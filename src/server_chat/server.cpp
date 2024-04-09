@@ -6,7 +6,7 @@
 #include "json/json.h"
 using namespace muduo;
 using namespace muduo::net;
-using namespace std;
+using namespace std; 
 using namespace placeholders;
 
 //初始化聊天服务器对象
@@ -40,6 +40,7 @@ void Server::on_connection(const TcpConnectionPtr &conn)
        // ChatService::instance()->client_close_exception(conn);
         conn->shutdown();
     }
+    LOG_DEBUG<<"lianjiechenggong";
 }
 
 //上报读写时间相关信息的回调函数

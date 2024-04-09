@@ -10,6 +10,7 @@ private:
 public:
    virtual ~service();
     virtual void operator()(const TcpConnectionPtr &conn, Json::Value &js, Timestamp time)const=0;
+    
 };
 
 

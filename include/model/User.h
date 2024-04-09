@@ -39,6 +39,8 @@ public:
     void setState(bool state);
     
     bool operator==(const User&x);
+
+    bool operator<(const User& x);
 private:
  
     std::string password_; // 密码
@@ -106,8 +108,46 @@ inline void User::setState(bool state) {
     state_ = state;
 }
 
+
    inline bool User::operator==(const User&x){
       return id_==x.getId();
    }
+
+
+   inline bool User::operator<(const User& x){
+          return id_<x.getId();
+   }
+namespace std
+{
+    template<>
+    struct hash<User>
+    {
+        typedef User argument_type;
+        typedef std::size_t result_type;
+
+        result_type operator()(argument_type const& s) const
+        {
+            result_type const h1 ( std::hash<int>()(s.getId()) );
+            result_type const h2 ( std::hash<int>()(s.getId()) );
+            return h1 ^ (h2 << 1);
+        }
+    };
+
+    template<>
+    struct   equal_to<User>
+    {
+        typedef User argument_type;
+        typedef std::size_t result_type;
+
+        result_type operator()(argument_type const& s1,argument_type const& s2) const
+        {
+            result_type const h1 ( std::hash<int>()(s1.getId()) );
+            result_type const h2 ( std::hash<int>()(s2.getId()) );
+            return h1==h2;
+        }
+    };
+
+}
+
 
 #endif // USER_H

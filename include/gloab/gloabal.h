@@ -24,6 +24,8 @@
 #include <vector>
 #include <thread>
 #include <shared_mutex>
+#include <map>
+#include<unordered_map>
 /*用来注册不同的回调函数*/
 enum class ServerMessage{
     LOGIN_MSG = 1,  //登录消息，绑定login
@@ -40,8 +42,37 @@ enum class ServerMessage{
 };
 cppdb::session db_connector(cppdb::pool::pointer&);
 std::string woaini111();
-extern   cppdb::pool::pointer my_pool;
 
+
+
+
+template<typename Key, typename Value>
+class ThreadSafeMap {
+private:
+    std::unordered_map<Key,Value>map;
+    mutable std::shared_mutex mutex; // 读写锁
+
+public:
+    void insert(const Key& key, const Value& value) {
+        std::unique_lock<std::shared_mutex> lock(mutex); // 写锁
+        map[key] = value;
+    }
+
+    typename std::unordered_map<Key, Value>::const_iterator get(const Key& key) const {
+        std::shared_lock<std::shared_mutex> lock(mutex); // 读锁
+        return map.find(key);
+    }
+
+    bool contains(const Key& key) const {
+        std::shared_lock<std::shared_mutex> lock(mutex); // 读锁
+        return map.find(key) != map.end();
+    }
+
+    void remove(const Key& key) {
+        std::unique_lock<std::shared_mutex> lock(mutex); // 写锁
+        map.erase(key);
+    }
+};
 
 template<typename T>
 class ThreadSafeVector {
@@ -118,6 +149,9 @@ public:
      }
     }
 };
-extern   ThreadSafeVector<User> gloabal_users;
+
+extern   cppdb::pool::pointer my_pool;
+extern   ThreadSafeVector<User> gloabal_users;//服务器在线列表
+extern   ThreadSafeMap<User,muduo::net::TcpConnectionPtr> user_connection_map;
 
 #endif

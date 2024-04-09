@@ -5,7 +5,7 @@
 #include"service/service.h"
 using namespace muduo;
 using namespace muduo::net;
-//还没有测试
+
 class RegistService:public service
 {
 private:
