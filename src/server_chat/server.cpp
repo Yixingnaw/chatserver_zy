@@ -2,7 +2,6 @@
 #include <string>
 #include <iostream>
 #include "gloab/server.h"
-#include "service/ChatService.h"
 #include "json/json.h"
 using namespace muduo;
 using namespace muduo::net;
@@ -22,6 +21,8 @@ Server::Server(EventLoop *loop, const InetAddress &listenAddr, const std::string
 
     //设置线程数量
     server_.setThreadNum(4);
+
+    
 }
 
 //启动服务

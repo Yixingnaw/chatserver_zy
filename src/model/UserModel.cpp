@@ -89,11 +89,28 @@ bool UserModel::reset_state()
 
 
 bool   UserModel::is_hava_user(User user){
-
+//尚未测试
           try {
          auto sql=db_connector(my_pool);
           cppdb::result res;
           res=sql << "SELECT * FROM User WHERE UserID=? AND Password=?" << user.getId()<<user.getPassword() << cppdb::row;
+          if(!res.empty()) {
+               return static_cast<bool>(res.get<int>(0));
+           }
+        else return false;         
+
+      } catch(std::exception const &e) {
+                LOG_ERROR<< "ERROR: " << e.what() ;
+                //异常终止程序
+                return false;
+              }
+}
+
+ bool UserModel::is_online(int userid){
+     try {
+         auto sql=db_connector(my_pool);
+          cppdb::result res;
+          res=sql << "SELECT State FROM User WHERE UserID=?" << userid << cppdb::row;
           if(!res.empty()) {
                return true;
            }
@@ -104,4 +121,4 @@ bool   UserModel::is_hava_user(User user){
                 //异常终止程序
                 return false;
               }
-}
+ }

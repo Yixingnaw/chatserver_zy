@@ -20,5 +20,7 @@ public:
     bool reset_state();
 
     bool is_hava_user(User user);
+    //查询是否在线
+    bool is_online(int userid);
 };
 #endif

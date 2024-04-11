@@ -13,7 +13,7 @@ private:
    // bool IsRead;
 public:
     // 构造函数
-    UserMessage(const std::string& content, const std::string& date="1999-08-05",
+    UserMessage(const std::string& content, const std::string& date="1999-08-05",//date必须这种格式
                 int senderID=0, int receiverID=0,int id=1)
         : Content(content), SendTime(date),
          SenderID(senderID), ReceiverID(receiverID) ,UserMessageID(id) {}

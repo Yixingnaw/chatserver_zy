@@ -33,6 +33,7 @@ enum class ServerMessage{
     REG_MSG,        //注册消息，绑定regist
     REG_MSG_ACK,    //注册响应消息
     ONE_CHAT_MSG,   //一对一聊天消息
+    ONE_CHAT_MSG_ACK, //一对一聊天消息响应
     ADD_FRIEND_MSG, //添加好友消息
     CREATE_GROUP_MSG, //创建群聊
     ADD_GROUP_MSG,    //加入群聊
@@ -41,9 +42,6 @@ enum class ServerMessage{
     
 };
 cppdb::session db_connector(cppdb::pool::pointer&);
-std::string woaini111();
-
-
 
 
 template<typename Key, typename Value>
@@ -151,7 +149,7 @@ public:
 };
 
 extern   cppdb::pool::pointer my_pool;
-extern   ThreadSafeVector<User> gloabal_users;//服务器在线列表
-extern   ThreadSafeMap<User,muduo::net::TcpConnectionPtr> user_connection_map;
+extern   ThreadSafeVector<int> gloabal_users;//服务器在线列表
+extern   ThreadSafeMap<int,muduo::net::TcpConnectionPtr> user_connection_map;
 
 #endif

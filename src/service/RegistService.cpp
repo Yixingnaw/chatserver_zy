@@ -26,7 +26,9 @@ void  RegistService::operator()(const TcpConnectionPtr &conn, Json::Value &js, T
         Json::Value ack;
           ack["msg_id"]= static_cast<int>(ServerMessage::REG_MSG_ACK);
           ack["msg_value"]=std::string("注册失败");
-          conn->send(muduo::StringPiece(ack.asString()));
+            Json::FastWriter fastWriter;
+         std::string jsonString = fastWriter.write(ack); 
+          conn->send(muduo::StringPiece(jsonString));
       
           return;
   }

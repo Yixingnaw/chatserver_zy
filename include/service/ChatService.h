@@ -3,6 +3,7 @@
 #include"gloab/gloabal.h"
 #include"service/LoginService.h"
 #include"service/RegistService.h"
+#include"service/FriendchatService.h"
 #include<map>
 #include<memory>
 class ChatService

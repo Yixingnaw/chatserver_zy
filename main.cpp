@@ -15,23 +15,16 @@
 int main()
 {
        muduo::Logger::setLogLevel(muduo::Logger::DEBUG);
-
-      auto sql=db_connector(my_pool);//不写上会链接不上为啥
-      
+      //不写上会链接不上为啥子
+      {
+      auto sql=db_connector(my_pool);
        User ass("3,","23","2312",2);
        User awww= UserModel().query(1);
-     // gloabal_users.push_back(awww);
- 
-     
-   /*  for(int i=10;i<30;i++){
-     GroupMember test_groupmember(7,i);
-     GroupMember test_groupmember2(8,i);
-      GroupModel().add_group(test_groupmember2) ; 
-     GroupModel().add_group(test_groupmember) ; }*/
- 
-      //这下面这一段必须先用来写上，不然会报链接错误，找不到muduonet库
+    UserMessageModel().query(std::vector<int>{});
+    UnreadUserMessageModel().query(1);
     FriendshipModel().query_friendship(ass);
     GroupModel().query_group(ass);
+      }
     EventLoop loop; //epoll
     InetAddress addr2("192.168.124.14", 9999);
     Server server2(&loop,addr2,"chatserver2");

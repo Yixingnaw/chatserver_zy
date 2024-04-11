@@ -18,22 +18,27 @@ void LoginService::operator()(const TcpConnectionPtr &conn, Json::Value &js, Tim
         user.setPassword(js["Password"].asString());
         if(!UserModel().is_hava_user(user)){
                ack["msg_value"]=std::string("密码错误");
-               conn->send(muduo::StringPiece(ack.asString()));
+         Json::FastWriter fastWriter;
+         std::string jsonString = fastWriter.write(ack); 
+          conn->send(muduo::StringPiece(jsonString));
               return;
 
         }
         user= UserModel().query(user.getId());
         //检测是否在线
-      if(gloabal_users.find(user)){
+      if(gloabal_users.find(user.getId())){
        //在线（这个有问题，正常逻辑应该是挤出另一个在线的客户端）
           ack["msg_value"]=std::string("用户在线");
-               conn->send(muduo::StringPiece(ack.asString()));
+            Json::FastWriter fastWriter;
+         std::string jsonString = fastWriter.write(ack); 
+          conn->send(muduo::StringPiece(jsonString));
+        
               return;
       }
       
        //不在线，插入在线列表，更新数据库状态,登陆成功
        Json::Value msg_value;
-       gloabal_users.push_back(user);
+        user_connection_map.insert(user.getId(),conn);
        UserModel().update_state(user);
         
        //返回用户好友列表

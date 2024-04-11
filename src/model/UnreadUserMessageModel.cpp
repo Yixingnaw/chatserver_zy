@@ -11,7 +11,7 @@ bool UnreadUserMessageModel::insert(UnreadUserMessage &unreadUsermessage){
                         "VALUES(?,?)"
                         << unreadUsermessage.getReceiverID()<< unreadUsermessage.getUserMessageID();
                 stat.exec();
-                unreadUsermessage.setUserMessageID(stat.last_insert_id());
+                unreadUsermessage.setUserMessageID(stat.last_insert_id());//获取最后一个插入的主键ID
 
                return true;              
       } catch(std::exception const &e) {

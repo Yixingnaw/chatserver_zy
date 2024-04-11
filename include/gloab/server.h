@@ -10,6 +10,7 @@
 #include"gloab/gloabal.h"
 #include"model/User.h"
 #include<string>
+#include "service/ChatService.h"
 using namespace muduo;
 using namespace muduo::net;
 //聊天服务器主类
