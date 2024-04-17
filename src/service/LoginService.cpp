@@ -7,6 +7,7 @@ LoginService::LoginService(/* args */)
 
 LoginService::~LoginService()
 {
+
 }
 // 
 void LoginService::operator()(const TcpConnectionPtr &conn, Json::Value &js, Timestamp time)const{
@@ -17,18 +18,21 @@ void LoginService::operator()(const TcpConnectionPtr &conn, Json::Value &js, Tim
         user.setId(js["UserID"].asInt());
         user.setPassword(js["Password"].asString());
         if(!UserModel().is_hava_user(user)){
-               ack["msg_value"]=std::string("密码错误");
+            Json::Value msg_value;
+          msg_value["value"]=std::string("密码错误");
+              ack["msg_value"]=msg_value;
          Json::FastWriter fastWriter;
          std::string jsonString = fastWriter.write(ack); 
           conn->send(muduo::StringPiece(jsonString));
               return;
-
         }
         user= UserModel().query(user.getId());
         //检测是否在线
       if(gloabal_users.find(user.getId())){
        //在线（这个有问题，正常逻辑应该是挤出另一个在线的客户端）
-          ack["msg_value"]=std::string("用户在线");
+        Json::Value msg_value;
+          msg_value["value"]=std::string("用户在线");
+          ack["msg_value"]=msg_value;
             Json::FastWriter fastWriter;
          std::string jsonString = fastWriter.write(ack); 
           conn->send(muduo::StringPiece(jsonString));
@@ -40,7 +44,7 @@ void LoginService::operator()(const TcpConnectionPtr &conn, Json::Value &js, Tim
        Json::Value msg_value;
         user_connection_map.insert(user.getId(),conn);
        UserModel().update_state(user);
-        
+       
        //返回用户好友列表
        Json::Value Friendships;
         std::vector<User> vec_user=FriendshipModel().query_friendship(user);
@@ -73,11 +77,31 @@ void LoginService::operator()(const TcpConnectionPtr &conn, Json::Value &js, Tim
           group.append(groupdate);
        }
        msg_value["Group"]=group;
-       //返回用户未读好友消息
-
-       //返回用户未读群消息,待完成
-
+       
+       //返回用户未读好友消息,记得删除数据库
+             
+       //返回用户未读群消息,记得删除数据库
+       
      //   ack["msg_value"]=std::string("用户在线");
       
-
 }
+/*
+{
+  "msg_id":
+  "msg_value":{
+    "value":
+  }
+    "msg_id":
+  "msg_value":{
+    "Friendship":[]
+    "Group":[
+      {"GroupID":
+      "GroupName":
+      "Description":
+      "GroupMember":[]
+      }
+      ....
+    ]
+  }
+}
+*/

@@ -11,9 +11,9 @@ bool  GroupModel::create_group(Group &x){
                stat = sql << 
                         "INSERT INTO `Group`(GroupName,Description) "//说多了都是泪！！注意表名插入反引号！！
                         "VALUES(?,?)"
-                        << x.getGroupName()<< x.getDescription() ;
+                        << x.getGroupName()<< x.getDescription();
                 stat.exec();
-                
+        x.setGroupID(stat.last_insert_id());
                return true;              
 
       } catch(std::exception const &e) {

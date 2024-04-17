@@ -9,12 +9,18 @@
 #include"model/UnreadUserMessageModel.h"
 #include"model/GroupModel.h"
 #include"model/FriendshipModel.h"
+#include"model/UnreadUserMessageModel.h"
 #include"service/LoginService.h"
 #include"service/RegistService.h"
+#include"service/GroupchatService.h"
+#include"service/CreatGroupService.h"
+#include"service/AddGroupService.h"
+#include"service/AddFriendService.h"
 #include"service/service.h"
 int main()
 {
-       muduo::Logger::setLogLevel(muduo::Logger::DEBUG);
+
+     muduo::Logger::setLogLevel(muduo::Logger::DEBUG);
       //不写上会链接不上为啥子
       {
       auto sql=db_connector(my_pool);
@@ -24,13 +30,16 @@ int main()
     UnreadUserMessageModel().query(1);
     FriendshipModel().query_friendship(ass);
     GroupModel().query_group(ass);
+    UnreadUserMessageModel();
+    CreatGroupService();
+    AddGroupService();
       }
     EventLoop loop; //epoll
     InetAddress addr2("192.168.124.14", 9999);
     Server server2(&loop,addr2,"chatserver2");
     server2.start(); //启动服务：listenfd通过epoll_ctl添加到epoll上
     loop.loop(); //类似于epoll_wait以阻塞的方式等待新用户连接或处理已连接用户的读写事件
-    //接上面一段
     
+    //接上面一段
     return 0;
 }

@@ -38,7 +38,6 @@ void   FriendchatService::operator()(const TcpConnectionPtr &conn, Json::Value &
         std::string SendTime=js["SendTime"].asString();
         int SenderID=js["SenderID"].asInt();
         int ReceiverID=js["ReceiverID"].asInt();
-
       UserMessage friend_message(Content,SendTime,SenderID,ReceiverID);
       UserMessageModel().insert(friend_message);
       UnreadUserMessage friend_unreadusemessage(ReceiverID,friend_message.getMessageID());

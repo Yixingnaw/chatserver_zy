@@ -16,7 +16,9 @@ void  RegistService::operator()(const TcpConnectionPtr &conn, Json::Value &js, T
       if(UserModel().insert(user)){
           Json::Value ack;
           ack["msg_id"]=static_cast<int>(ServerMessage::REG_MSG_ACK);
-          ack["msg_value"]=std::string("注册成功");
+          Json::Value msg_value;
+          msg_value["value"]=std::string("注册成功");
+          ack["msg_value"]=msg_value;
           Json::FastWriter fastWriter;
          std::string jsonString = fastWriter.write(ack);   
          conn->send(muduo::StringPiece(jsonString));
@@ -25,7 +27,9 @@ void  RegistService::operator()(const TcpConnectionPtr &conn, Json::Value &js, T
       else{
         Json::Value ack;
           ack["msg_id"]= static_cast<int>(ServerMessage::REG_MSG_ACK);
-          ack["msg_value"]=std::string("注册失败");
+          Json::Value msg_value;
+          msg_value["value"]=std::string("注册失败");
+          ack["msg_value"]=msg_value;
             Json::FastWriter fastWriter;
          std::string jsonString = fastWriter.write(ack); 
           conn->send(muduo::StringPiece(jsonString));
@@ -34,3 +38,11 @@ void  RegistService::operator()(const TcpConnectionPtr &conn, Json::Value &js, T
   }
 
 }
+/*
+{
+  "msg_id":
+  "msg_value":{
+    "value":
+  }
+}
+*/
