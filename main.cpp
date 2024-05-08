@@ -10,6 +10,7 @@
 #include"model/GroupModel.h"
 #include"model/FriendshipModel.h"
 #include"model/UnreadUserMessageModel.h"
+#include"model/UnreadGroupMessageModel.h"
 #include"service/LoginService.h"
 #include"service/RegistService.h"
 #include"service/GroupchatService.h"
@@ -31,6 +32,7 @@ int main()
     FriendshipModel().query_friendship(ass);
     GroupModel().query_group(ass);
     UnreadUserMessageModel();
+    UnreadGroupMessageModel();
     CreatGroupService();
     AddGroupService();
       }

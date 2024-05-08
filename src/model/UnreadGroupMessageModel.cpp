@@ -1,4 +1,6 @@
 #include"model/UnreadGroupMessageModel.h"
+#include"gloab/gloabal.h"
+using namespace std;
 UnreadGroupMessageModel::UnreadGroupMessageModel(/* args */)
 {
 }
@@ -6,4 +8,52 @@ UnreadGroupMessageModel::UnreadGroupMessageModel(/* args */)
 UnreadGroupMessageModel::~UnreadGroupMessageModel()
 {
      
+}
+bool UnreadGroupMessageModel::insert(UnreadGroupMessage &grouomessage){
+      try {
+         auto sql=db_connector(my_pool);
+          cppdb::statement stat;
+               stat = sql << 
+                        "INSERT INTO UnreadGroupMessage(Content,SendTime,SenderID,GroupID) "
+                        "VALUES(?,?,?,?)"
+                        << grouomessage.getContent()<< grouomessage.getSendTime()<< grouomessage.getSenderID()<<grouomessage.getGroupID();
+                stat.exec();
+                 grouomessage.setUnreadGroupMessageID(stat.last_insert_id());
+               return true;
+      } catch(std::exception const &e) {
+                LOG_ERROR<< "ERROR: " << e.what() ;
+                //异常终止程序
+       return false;
+        }
+        return false;
+}
+//限定返回一百条群消息，还没实现。
+std::vector<UnreadGroupMessage> UnreadGroupMessageModel::query(int groupid){
+  
+     vector<UnreadGroupMessage>vec_;
+       try {
+         auto sql=db_connector(my_pool);    
+          cppdb::result res;
+          res=sql << "SELECT * FROM UnreadGroupMessage WHERE GroupID=?" << groupid ;
+          
+          while(res.next()) {
+                UnreadGroupMessage groupMessage;
+                groupMessage.setUnreadGroupMessageID(res.get<int>(0));
+                groupMessage.setContent(res.get<string>(1));
+                groupMessage.setSendTime(res.get<string>(2));
+                groupMessage.setSenderID(res.get<int>(3));
+                groupMessage.setGroupID(groupid);
+              vec_.push_back(groupMessage);
+         }   
+         return vec_;
+      } catch(std::exception const &e) {
+                LOG_ERROR<< "ERROR: " << e.what() ;
+                //异常终止程序
+               
+              }
+
+}
+
+bool UnreadGroupMessageModel::delete_UserMessage(int groupid){
+    
 }

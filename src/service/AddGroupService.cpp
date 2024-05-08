@@ -45,6 +45,7 @@ void AddGroupService::operator()(const TcpConnectionPtr &conn, Json::Value &js, 
   "msg_id":
   "msg_value":{
     "value":
+    “”：
   }
 }
 */

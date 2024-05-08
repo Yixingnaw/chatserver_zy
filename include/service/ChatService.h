@@ -13,7 +13,7 @@ private:
     /* data */
         ChatService(/* args */);
     ~ChatService();
- 
+    
     std::map<int,std::shared_ptr<service>> msg_hander;//不同的消息对应不同的service对象
 public:
 

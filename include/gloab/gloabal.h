@@ -35,13 +35,15 @@ enum class ServerMessage{
     ONE_CHAT_MSG,   //一对一聊天消息
     ONE_CHAT_MSG_ACK, //一对一聊天消息响应
     ADD_FRIEND_MSG, //添加好友消息
+    ADD_FRIEND_MSG_ACK,
     CREATE_GROUP_MSG, //创建群聊
     CREATE_GROUP_MSG_ACK,
     ADD_GROUP_MSG,    //加入群聊
     ADD_GROUP_MSG_ACK,
     GROUP_CHAT_MSG,   //群聊消息
+    GROUP_CHAT_MSG_ACK,
     LOGINOUT_MSG,   //注销消息
-    
+    LOGINOUT_MSG_ACK,
 };
 cppdb::session db_connector(cppdb::pool::pointer&);
 

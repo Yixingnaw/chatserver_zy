@@ -7,7 +7,7 @@ using namespace muduo;
 using namespace muduo::net;
 class FriendchatService:public service
 {
-    //未测试
+    //还没测试
 private:
     /* data */
 public:

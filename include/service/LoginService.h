@@ -12,7 +12,7 @@
 using namespace muduo;
 using namespace muduo::net;
 class LoginService:public service
-{//还没有完成
+{//还没测试
 private:
     /* data */
 public:

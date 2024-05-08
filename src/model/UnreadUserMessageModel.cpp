@@ -22,7 +22,7 @@ bool UnreadUserMessageModel::insert(UnreadUserMessage &unreadUsermessage){
         return false;
 }
     
-      //根据ID查询,返回所以UnreadUserMessageID主键
+      //根据ID查询,返回所UserMessageID主键
 std::vector<int> UnreadUserMessageModel::query(int userid){
             std::vector<int> vec_;
       try {
@@ -30,17 +30,16 @@ std::vector<int> UnreadUserMessageModel::query(int userid){
           cppdb::result res;
           res=sql << "SELECT * FROM UnreadUserMessage WHERE ReceiverID=?" << userid ;
           while(res.next()) {
-                               int xxx=   res.get<int>(0);
+                               int xxx=   res.get<int>(2);
               vec_.push_back(xxx);
           
-           return vec_;
          }
+              return vec_;
       } catch(std::exception const &e) {
                 LOG_ERROR<< "ERROR: " << e.what() ;
                 //异常终止程序
                
               }
-
 
 }
 

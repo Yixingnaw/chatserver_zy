@@ -9,7 +9,7 @@ LoginService::~LoginService()
 {
 
 }
-// 
+//待测试
 void LoginService::operator()(const TcpConnectionPtr &conn, Json::Value &js, Timestamp time)const{
           Json::Value ack;
           ack["msg_id"]=static_cast<int>(ServerMessage::LOGIN_MSG_ACK);
@@ -76,21 +76,33 @@ void LoginService::operator()(const TcpConnectionPtr &conn, Json::Value &js, Tim
           groupdate["GroupMember"]=groupmember;
           group.append(groupdate);
        }
-       msg_value["Group"]=group;
-       
+       msg_value["Group"]=group;     
        //返回用户未读好友消息,记得删除数据库
-             
-       //返回用户未读群消息,记得删除数据库
-       
-     //   ack["msg_value"]=std::string("用户在线");
-      
+       Json::Value UnreadUserMessage;
+       auto vec_UnreadUserMessageid=UnreadUserMessageModel().query(user.getId());
+       UnreadUserMessageModel().delete_UnreadUserMessage(user.getId());
+       auto vec_UnreadUserMessage=UserMessageModel().query(vec_UnreadUserMessageid);
+       UserMessageModel().delete_UserMessage(user.getId());
+       for(const auto &x:vec_UnreadUserMessage){
+             Json::Value UnreadUserMessageData;
+             UnreadUserMessageData["UserMessageID"]=x.getMessageID();
+             UnreadUserMessageData["Content"]=x.getContent();
+             UnreadUserMessageData["SendTime"]=x.getDate();
+             UnreadUserMessageData["SenderID"]=x.getSenderID();
+             UnreadUserMessageData["ReceiverID"]=x.getReceiverID();
+             UnreadUserMessage.append(UnreadUserMessageData);
+       }
+       msg_value["UnreadUserMessage"]=UnreadUserMessage;
+   
+      ack["msg_value"]=msg_value;
+      Json::FastWriter fastWriter;
+      std::string jsonString = fastWriter.write(ack); 
+      conn->send(muduo::StringPiece(jsonString));
+      return;
 }
 /*
 {
-  "msg_id":
-  "msg_value":{
-    "value":
-  }
+
     "msg_id":
   "msg_value":{
     "Friendship":[]
@@ -100,8 +112,12 @@ void LoginService::operator()(const TcpConnectionPtr &conn, Json::Value &js, Tim
       "Description":
       "GroupMember":[]
       }
-      ....
+    ]
+    "UnreadUserMessage":[
+      {
+        
+      }
     ]
   }
-}
+}size_t
 */

@@ -7,7 +7,9 @@ class Friendship {
 public:
     Friendship( std::string friendRemark_, int userID_, int friendID_,int friendshipID_=1) :
       friendRemark(friendRemark_), userID(userID_), friendID(friendID_),  friendshipID(friendshipID_){}
-
+    Friendship(){
+      friendshipID=-1;
+    }
     // Getter methods
     int getFriendshipID() const { return friendshipID; }
     std::string getFriendRemark() const { return friendRemark; }

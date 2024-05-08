@@ -13,7 +13,7 @@ GroupchatService::~GroupchatService()
     “”：
   }
 */
- void GroupchatService::operator()(const TcpConnectionPtr &conn, Json::Value &js, Timestamp time)const{//暂时不保存群未读消息
+ void GroupchatService::operator()(const TcpConnectionPtr &conn, Json::Value &js, Timestamp time)const{
      Group group_;
      
  }
