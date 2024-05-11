@@ -127,3 +127,20 @@ std::map<Group,std::vector<GroupMember>> GroupModel::query_group(User& user){
 
 
 }
+std::vector<int> GroupModel::query_gropumembers(int groupid){
+     std::vector<int> vec_;
+         try {
+         auto sql=db_connector(my_pool);
+          cppdb::result res;
+               res=sql << "SELECT * FROM GroupMember WHERE GroupID=?" << groupid;
+               while(res.next()){                       
+                        vec_.push_back(res.get<int>(3));
+                    }
+                return vec_;  
+           }             
+       catch(std::exception const &e) {
+                LOG_ERROR<< "ERROR: " << e.what() ;
+                //异常终止程序
+              return vec_;
+              }
+}

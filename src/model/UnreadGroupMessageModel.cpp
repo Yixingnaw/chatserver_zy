@@ -27,14 +27,14 @@ bool UnreadGroupMessageModel::insert(UnreadGroupMessage &grouomessage){
         }
         return false;
 }
-//限定返回一百条群消息，还没实现。
-std::vector<UnreadGroupMessage> UnreadGroupMessageModel::query(int groupid){
+//限定返回一百条群消息。
+std::vector<UnreadGroupMessage> UnreadGroupMessageModel::query(int groupid,int history_number){
   
      vector<UnreadGroupMessage>vec_;
        try {
          auto sql=db_connector(my_pool);    
           cppdb::result res;
-          res=sql << "SELECT * FROM UnreadGroupMessage WHERE GroupID=?" << groupid ;
+          res=sql << "SELECT * FROM UnreadGroupMessage WHERE GroupID=? ORDER BY UnreadGroupMessageID DESC LIMIT 100 OFFSET ?" << groupid <<history_number;
           
           while(res.next()) {
                 UnreadGroupMessage groupMessage;

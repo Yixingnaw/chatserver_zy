@@ -28,7 +28,7 @@ void LoginService::operator()(const TcpConnectionPtr &conn, Json::Value &js, Tim
         }
         user= UserModel().query(user.getId());
         //检测是否在线
-      if(gloabal_users.find(user.getId())){
+      if(user_connection_map.contains(user.getId())){
        //在线（这个有问题，正常逻辑应该是挤出另一个在线的客户端）
         Json::Value msg_value;
           msg_value["value"]=std::string("用户在线");
@@ -43,6 +43,7 @@ void LoginService::operator()(const TcpConnectionPtr &conn, Json::Value &js, Tim
        //不在线，插入在线列表，更新数据库状态,登陆成功
        Json::Value msg_value;
         user_connection_map.insert(user.getId(),conn);
+  //      gloabal_users.push_back(user.getId());
        UserModel().update_state(user);
        
        //返回用户好友列表

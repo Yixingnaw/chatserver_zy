@@ -14,5 +14,6 @@ class GroupModel{
    bool  add_group(GroupMember &);//加入群
    bool  out_group(GroupMember &);//退出群
    std::map<Group,std::vector<GroupMember>> query_group(User&);//初次登陆时候返回用户所有群以及群里面对应的所有用户
+   std::vector<int> query_gropumembers(int groupid);
 };
 #endif

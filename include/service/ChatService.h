@@ -5,6 +5,10 @@
 #include"service/RegistService.h"
 #include"service/FriendchatService.h"
 #include"service/GroupchatService.h"
+#include"service/AddFriendService.h"
+#include"service/AddGroupService.h"
+#include"service/CreatGroupService.h"
+#include"service/LoginOutService.h"
 #include<map>
 #include<memory>
 class ChatService

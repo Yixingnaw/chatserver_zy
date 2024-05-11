@@ -45,7 +45,6 @@ void AddFriendService::operator()(const TcpConnectionPtr &conn, Json::Value &js,
          conn->send(muduo::StringPiece(jsonString));
          return;
      }
-    
 }
 /*
 {

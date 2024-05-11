@@ -15,11 +15,5 @@ public:
     void operator()(const TcpConnectionPtr &conn, Json::Value &js, Timestamp time)const;
 };
 
-LoginOutService::LoginOutService(/* args */)
-{
-}
 
-LoginOutService::~LoginOutService()
-{
-}
 #endif

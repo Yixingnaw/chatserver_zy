@@ -26,6 +26,7 @@
 #include <shared_mutex>
 #include <map>
 #include<unordered_map>
+#include<unordered_set>
 /*用来注册不同的回调函数*/
 enum class ServerMessage{
     LOGIN_MSG = 1,  //登录消息，绑定login
@@ -74,6 +75,7 @@ public:
         std::unique_lock<std::shared_mutex> lock(mutex); // 写锁
         map.erase(key);
     }
+
 };
 
 template<typename T>
@@ -150,6 +152,10 @@ public:
          return false;
      }
     }
+     std::unordered_set<T> online_uers(){
+        std::shared_lock<std::shared_mutex> lock(mtx); // 读锁
+        return std::unordered_set<T> (vec.begin(), vec.end());
+     }
 };
 
 extern   cppdb::pool::pointer my_pool;

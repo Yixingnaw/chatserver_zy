@@ -13,13 +13,11 @@ public:
     GroupchatService(/* args */);
     ~GroupchatService();
      void operator()(const TcpConnectionPtr &conn, Json::Value &js, Timestamp time)const;
-
-    
+     
+     void history_handle(const TcpConnectionPtr &conn,Json::Value &js)const;//客户端加载历史群消息请求
+     void groupchat_handle(const TcpConnectionPtr &conn,Json::Value &js)const;//客户端群聊信息请求；
 };
 
-/*
-   1：插入群消息，保留历史数据（防止数据库压力过大，采用消息队列异步处理，尚未完成）
-   2：找到群里面在线用户转发消息。
-*/
+
 
 #endif

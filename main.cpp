@@ -35,6 +35,7 @@ int main()
     UnreadGroupMessageModel();
     CreatGroupService();
     AddGroupService();
+    GroupchatService();
       }
     EventLoop loop; //epoll
     InetAddress addr2("192.168.124.14", 9999);

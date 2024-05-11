@@ -26,11 +26,11 @@ void   FriendchatService::operator()(const TcpConnectionPtr &conn, Json::Value &
     //查询是否在线
     if(user_connection_map.contains(js["ReceiverID"].asInt())){
         //找到好友socket转发消息
-      auto friend_socket=user_connection_map.get(js["ReceiverID"].asInt());
+      auto friend_socket_ptr=user_connection_map.get(js["ReceiverID"].asInt());
            ack["msg_value"]=js;
         Json::FastWriter fastWriter;
          std::string jsonString = fastWriter.write(ack);   
-         conn->send(muduo::StringPiece(jsonString));
+         friend_socket_ptr->second->send(muduo::StringPiece(jsonString));   
     }else
     //不在线写入数据库表
     {
