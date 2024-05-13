@@ -30,10 +30,11 @@ bool UserMessageModel::insert(UserMessage &usermessage){
       try {
          auto sql=db_connector(my_pool);
          for(auto x:UserMessageid){
+           //  LOG_DEBUG<<"vector 不是空的";
           cppdb::result res;
           res=sql << "SELECT * FROM UserMessage WHERE UserMessageID=?" << x ;
           while(res.next()) {
-            
+        //        LOG_DEBUG<<"数据库不是空的";
              UserMessage userMessage;
                         userMessage.setUserMessageID(res.get<int>(0));
                         userMessage.setContent(res.get<string>(1));
@@ -41,9 +42,11 @@ bool UserMessageModel::insert(UserMessage &usermessage){
                         userMessage.setSenderID(res.get<int>(3));
                          userMessage.setReceiverID(res.get<int>(4));
               vec_.push_back(userMessage);
+            
            }
-           return vec_;
          }
+    //      LOG_DEBUG<<"数据库查询函数返回";
+          return vec_;
       } catch(std::exception const &e) {
                 LOG_ERROR<< "ERROR: " << e.what() ;
                 //异常终止程序

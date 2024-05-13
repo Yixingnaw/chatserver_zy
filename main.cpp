@@ -18,6 +18,7 @@
 #include"service/AddGroupService.h"
 #include"service/AddFriendService.h"
 #include"service/service.h"
+#include"gloab/MessageQueue.h"
 int main()
 {
 
@@ -26,17 +27,22 @@ int main()
       {
       auto sql=db_connector(my_pool);
        User ass("3,","23","2312",2);
+       ass.setId(10);
        User awww= UserModel().query(1);
-    UserMessageModel().query(std::vector<int>{});
+   auto xxx= UserMessageModel().query(std::vector<int>{1,2,3});
     UnreadUserMessageModel().query(1);
     FriendshipModel().query_friendship(ass);
-    GroupModel().query_group(ass);
+     auto xxxx=  GroupModel().query_group(ass);
     UnreadUserMessageModel();
     UnreadGroupMessageModel();
     CreatGroupService();
     AddGroupService();
     GroupchatService();
       }
+    //启动数据库异步插入线程
+    std::thread consumerThread(consumer<UnreadGroupMessage>, std::ref(messageQueue));
+    consumerThread.detach();
+
     EventLoop loop; //epoll
     InetAddress addr2("192.168.124.14", 9999);
     Server server2(&loop,addr2,"chatserver2");

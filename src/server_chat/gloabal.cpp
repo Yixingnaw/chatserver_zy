@@ -1,4 +1,5 @@
 #include"gloab/gloabal.h"
+#include"gloab/MessageQueue.h"
 #include<string>
   //连接数据库，初始化数据库连接池4
  std::string connection_string("mysql:database=server;user=root;password='511304Woaini@'"); 
@@ -10,3 +11,4 @@ cppdb::session db_connector(cppdb::pool::pointer& x){
          cppdb::session sql(x->open());
          return sql;
 }
+MessageQueue<UnreadGroupMessage> messageQueue;//消息队列

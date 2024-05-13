@@ -2,12 +2,16 @@
 #include"service/GroupchatService.h"
 #include"model/GroupModel.h"
 #include"model/UnreadGroupMessageModel.h"
+
+#include"gloab/MessageQueue.h"
+
 GroupchatService::GroupchatService(/* args */)
 {
 }
 
 GroupchatService::~GroupchatService()
 {
+  
 }
 
  void GroupchatService::operator()(const TcpConnectionPtr &conn, Json::Value &js, Timestamp time)const{
@@ -50,7 +54,6 @@ void GroupchatService::history_handle(const TcpConnectionPtr &conn,Json::Value &
          ack["msg_value"]=msg_value;
           Json::FastWriter fastWriter;
          std::string jsonString = fastWriter.write(ack);
-
          conn->send(muduo::StringPiece(jsonString));
 
          LOG_DEBUG<<"群历史消息查询成功";
@@ -84,8 +87,13 @@ void GroupchatService::history_handle(const TcpConnectionPtr &conn,Json::Value &
 */
 void GroupchatService::groupchat_handle(const TcpConnectionPtr &conn,Json::Value &js)const{
 
- //  1：插入群消息，保留历史数据（防止数据库压力过大，采用消息队列异步处理，尚未完成）
-         
+ //  1：插入群消息，保留历史数据（防止数据库压力过大，采用消息队列异步处理）
+      UnreadGroupMessage data;
+      data.setContent(js["Content"].asString());
+      data.setSendTime(js["SendTime"].asString());
+      data.setSenderID(js["SenderID"].asInt());
+      data.setGroupID(js["GroupID"].asInt());
+      messageQueue.push(data);
   // 2：找到群里面在线用户转发消息,线程安全。
       Json::Value ack;
       ack["msg_id"]=static_cast<int>(ServerMessage::GROUP_CHAT_MSG_ACK);
@@ -98,7 +106,7 @@ void GroupchatService::groupchat_handle(const TcpConnectionPtr &conn,Json::Value
                     (user_connection_map.get(x))->second->send(jsonString);
           }
       }
-      LOG_DEBUG<<"群消息转发测试成功";
+       LOG_DEBUG<<"群消息转发测试成功";
       return;
 }
 /*

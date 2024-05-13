@@ -27,6 +27,7 @@
 #include <map>
 #include<unordered_map>
 #include<unordered_set>
+
 /*用来注册不同的回调函数*/
 enum class ServerMessage{
     LOGIN_MSG = 1,  //登录消息，绑定login
@@ -161,5 +162,4 @@ public:
 extern   cppdb::pool::pointer my_pool;
 extern   ThreadSafeVector<int> gloabal_users;//服务器在线列表
 extern   ThreadSafeMap<int,muduo::net::TcpConnectionPtr> user_connection_map;
-
 #endif
