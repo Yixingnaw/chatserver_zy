@@ -48,7 +48,7 @@ void Server::on_connection(const TcpConnectionPtr &conn)
 void Server::on_message(const TcpConnectionPtr &conn, Buffer *buffer, Timestamp time)
 {
     string buf = buffer->retrieveAllAsString();
-    cout<<"exute: "<<buf<<endl;
+                                                          LOG_DEBUG<<"exute: "<<buf;
     Json::Reader reader;
     Json::Value root;
     if (reader.parse(buf, root))  // reader将Json字符串解析到root，root将包含Json里所有子元素

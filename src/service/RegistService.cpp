@@ -22,6 +22,7 @@ void  RegistService::operator()(const TcpConnectionPtr &conn, Json::Value &js, T
           Json::FastWriter fastWriter;
          std::string jsonString = fastWriter.write(ack);   
          conn->send(muduo::StringPiece(jsonString));
+                                                                          LOG_DEBUG<<"注册成功账户"<<user.getId()<<"   "<<user.getUsername();
           return;
       }
       else{
@@ -33,7 +34,7 @@ void  RegistService::operator()(const TcpConnectionPtr &conn, Json::Value &js, T
             Json::FastWriter fastWriter;
          std::string jsonString = fastWriter.write(ack); 
           conn->send(muduo::StringPiece(jsonString));
-      
+                                                                           LOG_DEBUG<<"注册失败"<<user.getUsername();
           return;
   }
 

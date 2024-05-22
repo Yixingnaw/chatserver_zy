@@ -19,11 +19,16 @@
 #include"service/AddFriendService.h"
 #include"service/service.h"
 #include"gloab/MessageQueue.h"
+
+  //连接数据库，初始化数据库连接池4
+ std::string connection_string("mysql:database=server;user=root;password='511304Woaini@'"); 
+  cppdb::pool::pointer my_pool = cppdb::pool::create(connection_string);
+
 int main()
 {
-
+     
      muduo::Logger::setLogLevel(muduo::Logger::DEBUG);
-      //不写上会链接不上为啥子
+      //测试功能函数,不写上会链接不上为啥子
       {
       auto sql=db_connector(my_pool);
        User ass("3,","23","2312",2);
@@ -40,15 +45,15 @@ int main()
     GroupchatService();
       }
     //启动数据库异步插入线程
-    std::thread consumerThread(consumer<UnreadGroupMessage>, std::ref(messageQueue));
-    consumerThread.detach();
-
-    EventLoop loop; //epoll
-    InetAddress addr2("192.168.124.14", 9999);
-    Server server2(&loop,addr2,"chatserver2");
-    server2.start(); //启动服务：listenfd通过epoll_ctl添加到epoll上
-    loop.loop(); //类似于epoll_wait以阻塞的方式等待新用户连接或处理已连接用户的读写事件
+  //  std::thread consumerThread(consumer<UnreadGroupMessage>, std::ref(messageQueue));
+   // consumerThread.detach();
     
+    
+    EventLoop loop; //epoll
+    InetAddress addr2("192.168.124.14", 9998);
+    Server server2(&loop,addr2,"chatserver2");
+    server2.start(); //启动服务：listenfd通过epoll_ctl添加到epoll上    loop.loop(); //类似于epoll_wait以阻塞的方式等待新用户连接或处理已连接用户的读写事件
+    loop.loop();
     //接上面一段
     return 0;
 }

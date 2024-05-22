@@ -15,8 +15,9 @@ void LoginService::operator()(const TcpConnectionPtr &conn, Json::Value &js, Tim
           ack["msg_id"]=static_cast<int>(ServerMessage::LOGIN_MSG_ACK);
         //检测账号密码是否正确
         User user;
-        user.setId(js["UserID"].asInt());
+
         user.setPassword(js["Password"].asString());
+          user.setId(js["UserID"].asInt());
         if(!UserModel().is_hava_user(user)){
             Json::Value msg_value;
           msg_value["value"]=std::string("密码错误");
@@ -45,7 +46,7 @@ void LoginService::operator()(const TcpConnectionPtr &conn, Json::Value &js, Tim
         user_connection_map.insert(user.getId(),conn);
   //      gloabal_users.push_back(user.getId());
        UserModel().update_state(user);
-       
+                                                                               LOG_DEBUG<<"登陆成功";
        //返回用户好友列表
        Json::Value Friendships;
         std::vector<User> vec_user=FriendshipModel().query_friendship(user);
@@ -58,6 +59,7 @@ void LoginService::operator()(const TcpConnectionPtr &conn, Json::Value &js, Tim
            Friendships.append(user_);
          }
          msg_value["Friendship"]=Friendships;
+                                                                                 LOG_DEBUG<<"用户所有好友信息获取完毕"; 
        //返回用户群组列表以及对应的群用户
        Json::Value group;
        auto map_group=GroupModel().query_group(user);
@@ -77,7 +79,8 @@ void LoginService::operator()(const TcpConnectionPtr &conn, Json::Value &js, Tim
           groupdate["GroupMember"]=groupmember;
           group.append(groupdate);
        }
-       msg_value["Group"]=group;     
+       msg_value["Group"]=group;                                        
+                                                                                LOG_DEBUG<<"用户所有群信息获取完毕";
        //返回用户未读好友消息,记得删除数据库
        Json::Value UnreadUserMessage;
        auto vec_UnreadUserMessageid=UnreadUserMessageModel().query(user.getId());
@@ -94,10 +97,11 @@ void LoginService::operator()(const TcpConnectionPtr &conn, Json::Value &js, Tim
              UnreadUserMessage.append(UnreadUserMessageData);
        }
        msg_value["UnreadUserMessage"]=UnreadUserMessage;
-   
+                                                                                  LOG_DEBUG<<"用户所有未读消息获取完毕";
       ack["msg_value"]=msg_value;
       Json::FastWriter fastWriter;
       std::string jsonString = fastWriter.write(ack); 
+                                                                                     LOG_DEBUG<<jsonString;
       conn->send(muduo::StringPiece(jsonString));
       return;
 }

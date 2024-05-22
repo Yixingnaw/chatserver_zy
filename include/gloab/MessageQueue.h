@@ -31,7 +31,7 @@ public:
         std::unique_lock<std::mutex> lock(mutex_);
         // 消费者函数或定时器唤醒之后，检查消息队列是否为空
             condition_.wait(lock,[this](){
-                                                            LOG_DEBUG<<"消息队列被唤醒";
+                                                           // LOG_DEBUG<<"消息队列被唤醒";
                  return (!queue_.empty())||(!isRunning);
             });
        //非空
@@ -40,7 +40,8 @@ public:
            {
                message.push_back(queue_.front());
                queue_.pop();
-           }
+                                                           //LOG_DEBUG<<"数据库开始异步存入";          
+            }
             return true;
         }
         //停止信号
@@ -72,7 +73,7 @@ public:
 
                 // 唤醒条件变量
                 condVar.notify_one();
-                                                                        LOG_DEBUG<<"定时器已经唤醒";
+                                                                      //  LOG_DEBUG<<"定时器已经唤醒";
             }
         });
 
