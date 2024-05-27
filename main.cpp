@@ -50,7 +50,7 @@ int main()
     
     
     EventLoop loop; //epoll
-    InetAddress addr2("192.168.124.14", 9998);
+    InetAddress addr2("192.168.124.14", 9999);
     Server server2(&loop,addr2,"chatserver2");
     server2.start(); //启动服务：listenfd通过epoll_ctl添加到epoll上    loop.loop(); //类似于epoll_wait以阻塞的方式等待新用户连接或处理已连接用户的读写事件
     loop.loop();

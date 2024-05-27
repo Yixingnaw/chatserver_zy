@@ -34,14 +34,22 @@ void Server::start()
 //上报连接相关信息的回调函数
 void Server::on_connection(const TcpConnectionPtr &conn)
 {
-    //如果用户断开连接
+    //用户断开连接
     if (!conn->connected())
     {
-        //处理异常断开
-       // ChatService::instance()->client_close_exception(conn);
+     if(user_connection_map.contains(conn)){
+        //如果是在线用户断开连接
+        auto user_id= user_connection_map.remove(conn);
         conn->shutdown();
+        LOG_INFO<< user_id <<"断开连接";
+        return;
+     }else{
+        //其他连接断开，譬如说注册等
+     LOG_INFO<<"客户端断开连接";
+         return;
+     }
     }
-    LOG_DEBUG<<"lianjiechenggong";
+    LOG_INFO<<"新连接";
 }
 
 //上报读写时间相关信息的回调函数

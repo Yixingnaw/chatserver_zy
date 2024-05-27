@@ -71,12 +71,34 @@ public:
         std::shared_lock<std::shared_mutex> lock(mutex); // 读锁
         return map.find(key) != map.end();
     }
-
+    
+    bool contains(const Value& value) const {
+        std::shared_lock<std::shared_mutex> lock(mutex); // 读锁
+         for(const auto &x:map){
+            if(x.second == value){
+                return true;
+            }
+         }
+         return false;
+    }
     void remove(const Key& key) {
         std::unique_lock<std::shared_mutex> lock(mutex); // 写锁
         map.erase(key);
     }
+   Key remove(const Value& value) {
+    std::unique_lock<std::shared_mutex> lock(mutex); // 写锁
+    for (auto it = map.begin(); it != map.end();) {
+        if (it->second == value) {
+            auto key=(*it).first;
+            it = map.erase(it); // erase 返回下一个有效的迭代器    
+            return key;
+        } else {
+            ++it;
+        }
+    }
+    } 
 
+    
 };
 
 template<typename T>
@@ -160,6 +182,5 @@ public:
 };
 
 extern   cppdb::pool::pointer my_pool;
-extern   ThreadSafeVector<int> gloabal_users;//服务器在线列表
 extern   ThreadSafeMap<int,muduo::net::TcpConnectionPtr> user_connection_map;
 #endif
