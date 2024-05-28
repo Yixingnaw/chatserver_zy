@@ -29,8 +29,9 @@ void   FriendchatService::operator()(const TcpConnectionPtr &conn, Json::Value &
       auto friend_socket_ptr=user_connection_map.get(js["ReceiverID"].asInt());
            ack["msg_value"]=js;
         Json::FastWriter fastWriter;
-         std::string jsonString = fastWriter.write(ack);   
-         friend_socket_ptr->second->send(muduo::StringPiece(jsonString));   
+         std::string jsonString = fastWriter.write(ack);
+           message message_data(jsonString);
+         friend_socket_ptr->second->send(message_data.data(),message_data.size());
     }else
     //不在线写入数据库表
     {

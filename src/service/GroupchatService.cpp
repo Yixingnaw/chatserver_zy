@@ -53,8 +53,9 @@ void GroupchatService::history_handle(const TcpConnectionPtr &conn,Json::Value &
          msg_value["UnreadGroupMessage"]=UnreadGroupMessage;
          ack["msg_value"]=msg_value;
           Json::FastWriter fastWriter;
-         std::string jsonString = fastWriter.write(ack);
-         conn->send(muduo::StringPiece(jsonString));
+          std::string jsonString = fastWriter.write(ack);
+       message message_data(jsonString);
+          conn->send(message_data.data(),message_data.size());
 
          LOG_DEBUG<<"群历史消息查询成功";
          return;
@@ -103,7 +104,8 @@ void GroupchatService::groupchat_handle(const TcpConnectionPtr &conn,Json::Value
       auto vec_groupmembers_=GroupModel{}.query_gropumembers(js["GroupID"].asInt());//群表所有用户
       for(auto &x:vec_groupmembers_){
           if(user_connection_map.contains(x)){  //n1 * logn2复杂度，加n1个读锁开销
-                    (user_connection_map.get(x))->second->send(jsonString);
+           message message_data(jsonString);
+                  (user_connection_map.get(x))->second->send(message_data.data(),message_data.size());
           }
       }
        LOG_DEBUG<<"群消息转发测试成功";

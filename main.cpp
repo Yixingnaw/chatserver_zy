@@ -43,6 +43,7 @@ int main()
     CreatGroupService();
     AddGroupService();
     GroupchatService();
+    message();
       }
     //启动数据库异步插入线程
   //  std::thread consumerThread(consumer<UnreadGroupMessage>, std::ref(messageQueue));

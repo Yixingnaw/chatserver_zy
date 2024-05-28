@@ -41,7 +41,7 @@ void Server::on_connection(const TcpConnectionPtr &conn)
         //如果是在线用户断开连接
         auto user_id= user_connection_map.remove(conn);
         conn->shutdown();
-        LOG_INFO<< user_id <<"断开连接";
+        LOG_INFO<< user_id <<"断开连接";  
         return;
      }else{
         //其他连接断开，譬如说注册等

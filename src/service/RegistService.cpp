@@ -18,10 +18,12 @@ void  RegistService::operator()(const TcpConnectionPtr &conn, Json::Value &js, T
           ack["msg_id"]=static_cast<int>(ServerMessage::REG_MSG_ACK);
           Json::Value msg_value;
           msg_value["value"]=std::string("注册成功");
+          msg_value["UserID"]=user.getId();
           ack["msg_value"]=msg_value;
           Json::FastWriter fastWriter;
          std::string jsonString = fastWriter.write(ack);   
-         conn->send(muduo::StringPiece(jsonString));
+         message message_data(jsonString);
+          conn->send(message_data.data(),message_data.size());
                                                                           LOG_DEBUG<<"注册成功账户"<<user.getId()<<"   "<<user.getUsername();
           return;
       }
@@ -33,7 +35,8 @@ void  RegistService::operator()(const TcpConnectionPtr &conn, Json::Value &js, T
           ack["msg_value"]=msg_value;
             Json::FastWriter fastWriter;
          std::string jsonString = fastWriter.write(ack); 
-          conn->send(muduo::StringPiece(jsonString));
+         message message_data(jsonString);
+          conn->send(message_data.data(),message_data.size());
                                                                            LOG_DEBUG<<"注册失败"<<user.getUsername();
           return;
   }

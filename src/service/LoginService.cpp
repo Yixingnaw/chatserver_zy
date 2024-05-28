@@ -1,5 +1,5 @@
 #include"service/LoginService.h"
-
+#include<vector>
 LoginService::LoginService(/* args */)
 {
     
@@ -24,7 +24,9 @@ void LoginService::operator()(const TcpConnectionPtr &conn, Json::Value &js, Tim
               ack["msg_value"]=msg_value;
          Json::FastWriter fastWriter;
          std::string jsonString = fastWriter.write(ack); 
-          conn->send(muduo::StringPiece(jsonString));
+           message message_data(jsonString);
+          conn->send(message_data.data(),message_data.size());
+                                                                        LOG_DEBUG<<jsonString;
               return;
         }
         user= UserModel().query(user.getId());
@@ -36,7 +38,8 @@ void LoginService::operator()(const TcpConnectionPtr &conn, Json::Value &js, Tim
           ack["msg_value"]=msg_value;
             Json::FastWriter fastWriter;
          std::string jsonString = fastWriter.write(ack); 
-          conn->send(muduo::StringPiece(jsonString));
+         message message_data(jsonString);
+          conn->send(message_data.data(),message_data.size());
         
               return;
       }
@@ -101,13 +104,14 @@ void LoginService::operator()(const TcpConnectionPtr &conn, Json::Value &js, Tim
       ack["msg_value"]=msg_value;
       Json::FastWriter fastWriter;
       std::string jsonString = fastWriter.write(ack); 
-                                                                                     LOG_DEBUG<<jsonString;
-      conn->send(muduo::StringPiece(jsonString));
+      
+      message longin_ack_data(jsonString);
+                                                                                     LOG_DEBUG<<jsonString; LOG_DEBUG<<"data数据长度"<<longin_ack_data.size();
+      conn->send(longin_ack_data.data(),longin_ack_data.size());
       return;
 }
 /*
 {
-
     "msg_id":
   "msg_value":{
     "Friendship":[]

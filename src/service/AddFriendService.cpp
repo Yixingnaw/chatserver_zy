@@ -34,7 +34,8 @@ void AddFriendService::operator()(const TcpConnectionPtr &conn, Json::Value &js,
           ack["msg_value"]=msg_value;
           Json::FastWriter fastWriter;
          std::string jsonString = fastWriter.write(ack);   
-         conn->send(muduo::StringPiece(jsonString));
+         message message_data(jsonString);
+          conn->send(message_data.data(),message_data.size());
                                                                     LOG_DEBUG<<"添加好友成功";
          return;
      }else{
@@ -43,7 +44,8 @@ void AddFriendService::operator()(const TcpConnectionPtr &conn, Json::Value &js,
           ack["msg_value"]=msg_value;
           Json::FastWriter fastWriter;
          std::string jsonString = fastWriter.write(ack);   
-         conn->send(muduo::StringPiece(jsonString));
+        message message_data(jsonString);
+          conn->send(message_data.data(),message_data.size());
                                                                     LOG_DEBUG<<"添加好友失败";
          return;
      }

@@ -60,8 +60,6 @@ bool  GroupModel::add_group(GroupMember &x){
                         "VALUES(?,?,?,?)"
                         << x.getRole() << x.getJoinTime() <<x.getGroupID() <<x.getUserID();
                 stat.exec();
-                x.setGroupID(stat.last_insert_id());
-
                return true;              
 
       } catch(std::exception const &e) {
