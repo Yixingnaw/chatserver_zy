@@ -40,7 +40,6 @@ void LoginService::operator()(const TcpConnectionPtr &conn, Json::Value &js, Tim
          std::string jsonString = fastWriter.write(ack); 
          message message_data(jsonString);
           conn->send(message_data.data(),message_data.size());
-        
               return;
       }
       
@@ -50,6 +49,12 @@ void LoginService::operator()(const TcpConnectionPtr &conn, Json::Value &js, Tim
   //      gloabal_users.push_back(user.getId());
        UserModel().update_state(user);
                                                                                LOG_DEBUG<<"登陆成功";
+
+        //返回用户自己的信息
+        Json::Value user__;
+             user__["Username"]=user.getUsername();
+             user__["PersonalSignature"]=user.getPersonalSignature();
+        msg_value["User"]=user__;                                                    
        //返回用户好友列表
        Json::Value Friendships;
         std::vector<User> vec_user=FriendshipModel().query_friendship(user);
@@ -114,6 +119,10 @@ void LoginService::operator()(const TcpConnectionPtr &conn, Json::Value &js, Tim
 {
     "msg_id":
   "msg_value":{
+    "User":{
+      "Username":
+      "PersonalSignature":
+    }
     "Friendship":[]
     "Group":[
       {"GroupID":
