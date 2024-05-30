@@ -7,6 +7,8 @@
 #include <chrono>
 #include "muduo/base/Logging.h"
 #include"model/UnreadGroupMessageModel.h"
+#include"model/UnreadUserMessageModel.h"
+#include"model/UserMessageModel.h"
 #include<vector>
 #include<algorithm>
 
@@ -31,7 +33,7 @@ public:
         std::unique_lock<std::mutex> lock(mutex_);
         // 消费者函数或定时器唤醒之后，检查消息队列是否为空
             condition_.wait(lock,[this](){
-                                                           // LOG_DEBUG<<"消息队列被唤醒";
+                                                           LOG_DEBUG<<"消息队列被唤醒";
                  return (!queue_.empty())||(!isRunning);
             });
        //非空
@@ -42,7 +44,7 @@ public:
                queue_.pop();
                                                            //LOG_DEBUG<<"数据库开始异步存入";          
             }
-            return true;
+            return true; 
         }
         //停止信号
         LOG_ERROR<<"消息队列停止了";
@@ -106,16 +108,35 @@ void producer(MessageQueue<T>& mq,const T &data) {
 
 // 消费者线程函数，执行数据库插入
 template<typename T>
-void consumer(MessageQueue<T>& mq) 
+void  UnreadGroupMessage_consumer(MessageQueue<T>& mq) 
 {
     mq.startTimer();//启动定时器线程，每隔一定时间唤醒消息队列。
     std::vector<UnreadGroupMessage> message;
     while (mq.pop(message)) {
+        UnreadGroupMessageModel model_;
           for(auto& x:message){
-            UnreadGroupMessageModel{}.insert(x);
+            model_.insert(x);
           }
+          message.clear();
     }
 }
+template<typename T>
+void  UserMessage_consumer(MessageQueue<T>& mq) 
+{
+    mq.startTimer();//启动定时器线程，每隔一定时间唤醒消息队列。
+    std::vector<UserMessage> message;
+    while (mq.pop(message)) {
+      UserMessageModel usermessage_model;
+      UnreadUserMessageModel unreadUserMessage_model;
+          for(auto& x:message){
+            usermessage_model.insert(x);
+             UnreadUserMessage friend_unreadusemessage(x.getReceiverID(),x.getMessageID());
+             unreadUserMessage_model.insert(friend_unreadusemessage);
+                                            LOG_DEBUG<<"开始插入第"<<message.size()<<"条";
+          }
+          message.clear();
+    }
+}
+extern   MessageQueue<UnreadGroupMessage> UnreadGroup_messageQueue;//消息队列
+extern   MessageQueue<UserMessage>      UnreadUser_messageQueue;
 
-
-extern   MessageQueue<UnreadGroupMessage> messageQueue;//消息队列

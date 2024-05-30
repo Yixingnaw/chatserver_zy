@@ -57,7 +57,7 @@ void GroupchatService::history_handle(const TcpConnectionPtr &conn,Json::Value &
        message message_data(jsonString);
           conn->send(message_data.data(),message_data.size());
 
-         LOG_DEBUG<<"群历史消息查询成功";
+       LOG_DEBUG<<"群历史消息查询成功";
          return;
 }
 /*
@@ -94,7 +94,7 @@ void GroupchatService::groupchat_handle(const TcpConnectionPtr &conn,Json::Value
       data.setSendTime(js["SendTime"].asString());
       data.setSenderID(js["SenderID"].asInt());
       data.setGroupID(js["GroupID"].asInt());
-      messageQueue.push(data);
+      UnreadGroup_messageQueue.push(data);
   // 2：找到群里面在线用户转发消息,线程安全。
       Json::Value ack;
       ack["msg_id"]=static_cast<int>(ServerMessage::GROUP_CHAT_MSG_ACK);

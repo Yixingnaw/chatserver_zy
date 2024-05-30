@@ -65,7 +65,7 @@ void Server::on_message(const TcpConnectionPtr &conn, Buffer *buffer, Timestamp 
     //通过js里面的msgid，绑定msgid的回调函数，获取业务处理器handler
     auto  msg_handler= ChatService::instance().get_handler(root["msg_id"].asInt());//返回service对象
 
-              //其实这个msg_handler就是login或者regist
+          
        (*msg_handler)(conn, root["msg_value"], time);
   }
     

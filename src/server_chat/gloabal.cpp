@@ -7,4 +7,5 @@ cppdb::session db_connector(cppdb::pool::pointer& x){
          cppdb::session sql(x->open());
          return sql;
 }
-MessageQueue<UnreadGroupMessage> messageQueue;//消息队列
+MessageQueue<UnreadGroupMessage> UnreadGroup_messageQueue;//消息队列
+MessageQueue<UserMessage>      UnreadUser_messageQueue;

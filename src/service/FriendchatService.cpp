@@ -3,6 +3,7 @@
 #include"model/UserMessageModel.h"
 #include"model/UnreadUserMessageModel.h"
 #include"model/UserModel.h"
+#include"gloab/MessageQueue.h"
 #include"algorithm"
 FriendchatService::FriendchatService(/* args */)
 {
@@ -40,9 +41,11 @@ void   FriendchatService::operator()(const TcpConnectionPtr &conn, Json::Value &
         int SenderID=js["SenderID"].asInt();
         int ReceiverID=js["ReceiverID"].asInt();
       UserMessage friend_message(Content,SendTime,SenderID,ReceiverID);
-      UserMessageModel().insert(friend_message);
+   /*   UserMessageModel().insert(friend_message);
       UnreadUserMessage friend_unreadusemessage(ReceiverID,friend_message.getMessageID());
       UnreadUserMessageModel().insert(friend_unreadusemessage);
+      */
+       UnreadUser_messageQueue.push(friend_message);
     }
     
 }
