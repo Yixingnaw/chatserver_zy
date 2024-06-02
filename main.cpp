@@ -46,10 +46,11 @@ int main()
     message();
       }
     //启动数据库异步插入线程
-  //  std::thread consumerThread(consumer<UnreadGroupMessage>, std::ref(messageQueue));
-   // consumerThread.detach();
+   std::thread  group_consumerThread(UnreadGroupMessage_consumer<UnreadGroupMessage>, std::ref(UnreadGroup_messageQueue));
+    group_consumerThread.detach();
     std::thread  UserMessage_consumerThread(UserMessage_consumer<UserMessage>, std::ref(UnreadUser_messageQueue));
     UserMessage_consumerThread.detach();
+
 
     EventLoop loop; //epoll
     InetAddress addr2("192.168.124.14", 9999);

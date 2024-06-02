@@ -21,7 +21,7 @@ public:
         std::unique_lock<std::mutex> lock(mutex_);
         queue_.push(message);
         // 每更新二十条数据,通知等待中的消费者线程
-        if(queue_.size()>20){
+        if(queue_.size()>500){
         condition_.notify_one();
         }else{
             return;
@@ -33,7 +33,7 @@ public:
         std::unique_lock<std::mutex> lock(mutex_);
         // 消费者函数或定时器唤醒之后，检查消息队列是否为空
             condition_.wait(lock,[this](){
-                                                           LOG_DEBUG<<"消息队列被唤醒";
+                                                          // LOG_DEBUG<<"消息队列被唤醒";
                  return (!queue_.empty())||(!isRunning);
             });
        //非空
@@ -68,7 +68,7 @@ public:
         std::thread timerThread([this, &condVar, &mtx]() {
             while (!shouldStop) {
                 // 等待 20 秒
-                std::this_thread::sleep_for(std::chrono::seconds(20));
+                std::this_thread::sleep_for(std::chrono::seconds(10));
 
                 // 使用互斥锁锁定条件变量
                 std::unique_lock<std::mutex> lock(mtx);
@@ -132,7 +132,7 @@ void  UserMessage_consumer(MessageQueue<T>& mq)
             usermessage_model.insert(x);
              UnreadUserMessage friend_unreadusemessage(x.getReceiverID(),x.getMessageID());
              unreadUserMessage_model.insert(friend_unreadusemessage);
-                                            LOG_DEBUG<<"开始插入第"<<message.size()<<"条";
+                                         //   LOG_DEBUG<<"开始插入第"<<message.size()<<"条";
           }
           message.clear();
     }

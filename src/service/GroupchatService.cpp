@@ -103,9 +103,9 @@ void GroupchatService::groupchat_handle(const TcpConnectionPtr &conn,Json::Value
       std::string jsonString = fastWriter.write(ack);   
       auto vec_groupmembers_=GroupModel{}.query_gropumembers(js["GroupID"].asInt());//群表所有用户
       for(auto &x:vec_groupmembers_){
-          if(user_connection_map.contains(x)){  //n1 * logn2复杂度，加n1个读锁开销
+          if(user_connection_map.contains(x)&&x!=data.getSenderID()){  //n1 * logn2复杂度，加n1个读锁开销
            message message_data(jsonString);
-                  (user_connection_map.get(x))->second->send(message_data.data(),message_data.size());
+          (user_connection_map.get(x))->second->send(message_data.data(),message_data.size());
           }
       }
        LOG_DEBUG<<"群消息转发测试成功";

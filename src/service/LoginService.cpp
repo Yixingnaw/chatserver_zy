@@ -47,6 +47,7 @@ void LoginService::operator()(const TcpConnectionPtr &conn, Json::Value &js, Tim
        Json::Value msg_value;
         user_connection_map.insert(user.getId(),conn);
   //      gloabal_users.push_back(user.getId());
+       user.setState(true);
        UserModel().update_state(user);
                                                                                LOG_DEBUG<<"登陆成功";
 
