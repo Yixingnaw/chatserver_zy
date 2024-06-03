@@ -25,7 +25,10 @@ bool UserModel::insert(User &user)
                 //异常终止程序
        return false;
         }
+       catch (...) {
+        LOG_ERROR << "Unknown error in ";
         return false;
+    }
 }
 
 //根据ID查询user信息，失败返回一个默认构造User，id = -1
@@ -50,8 +53,11 @@ User UserModel::query(int id)
       } catch(std::exception const &e) {
                 LOG_ERROR<< "ERROR: " << e.what() ;
                 //异常终止程序
-                return User();
-              }
+                return User{};
+              }catch (...) {
+        LOG_ERROR << "Unknown error in ";
+        return User{};
+    }
 
 }
 
@@ -69,7 +75,10 @@ bool UserModel::update_state(User user)
                 //异常终止程序
                 return false;
         }
+       catch (...) {
+        LOG_ERROR << "Unknown error in ";
         return false;
+    }
 }
 
 //重置服务器所有用户状态信息,
@@ -84,7 +93,10 @@ bool UserModel::reset_state()
                 LOG_ERROR<< "ERROR: " << e.what() ;
                 //异常终止程序
         }
+     catch (...) {
+        LOG_ERROR << "Unknown error in ";
         return false;
+    }
 }
 
 
@@ -95,15 +107,17 @@ bool   UserModel::is_hava_user(User user){
           cppdb::result res;
           res=sql << "SELECT * FROM User WHERE UserID=? AND Password=?" << user.getId()<<user.getPassword() << cppdb::row;
           if(!res.empty()) {
-               return static_cast<bool>(res.get<int>(0));
+               return true;
            }
         else return false;         
 
       } catch(std::exception const &e) {
                 LOG_ERROR<< "ERROR: " << e.what() ;
-                //异常终止程序
-                return false;
-              }
+           return false;
+       }catch (...) {
+        LOG_ERROR << "Unknown error in ";
+        return false;
+    }
 }
 
  bool UserModel::is_online(int userid){
@@ -118,7 +132,9 @@ bool   UserModel::is_hava_user(User user){
 
       } catch(std::exception const &e) {
                 LOG_ERROR<< "ERROR: " << e.what() ;
-                //异常终止程序
                 return false;
-              }
+         }catch (...) {
+        LOG_ERROR << "Unknown error in ";
+        return false;
+    }
  }

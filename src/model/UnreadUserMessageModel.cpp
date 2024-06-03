@@ -16,10 +16,12 @@ bool UnreadUserMessageModel::insert(UnreadUserMessage &unreadUsermessage){
                return true;              
       } catch(std::exception const &e) {
                 LOG_ERROR<< "ERROR: " << e.what() ;
-                //异常终止程序
        return false;
-        }
+        }catch (...) {
+        LOG_ERROR << "Unknown error in ";
         return false;
+    }
+      
 }
     
       //根据ID查询,返回所UserMessageID主键
@@ -37,9 +39,11 @@ std::vector<int> UnreadUserMessageModel::query(int userid){
               return vec_;
       } catch(std::exception const &e) {
                 LOG_ERROR<< "ERROR: " << e.what() ;
-                //异常终止程序
-               
-              }
+                 return std::vector<int>{};    
+         }catch (...) {
+        LOG_ERROR << "Unknown error in ";
+        return std::vector<int>{};
+    }
 
 }
 
@@ -52,8 +56,10 @@ bool UnreadUserMessageModel::delete_UnreadUserMessage(int userid){
            return true;
       } catch(std::exception const &e) {
                 LOG_ERROR<< "ERROR: " << e.what() ;
-                //异常终止程序
+                return false;
         }
+        catch (...) {
+        LOG_ERROR << "Unknown error in ";
         return false;
+    }
 }
-     

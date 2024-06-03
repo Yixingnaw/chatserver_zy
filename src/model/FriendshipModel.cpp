@@ -18,14 +18,19 @@ using namespace std;
                 stat.exec();
                return true;     
            } 
-          else  return false;//好友表存在
+          else { 
+            return false;
+            }
 
       } catch(std::exception const &e) {
                 LOG_ERROR<< "ERROR: " << e.what() ;
-                //异常终止程序
-       return false;
-        }
+             
+           return false;
+        }catch (...) {
+        LOG_ERROR << "Unknown error in ";
         return false;
+    }
+       
 
 
     }
@@ -36,12 +41,17 @@ using namespace std;
   
           sql << "DELETE  FROM Friendship WHERE (UserID = ? AND FriendID = ?) OR (UserID = ? AND FriendID = ?)"
          <<x.getFriendID()<<x.getUserID()<<x.getUserID()<<x.getFriendID()<<cppdb::exec;
+
            return true;
       } catch(std::exception const &e) {
                 LOG_ERROR<< "ERROR: " << e.what() ;
-                //异常终止程序
+                
+                return false;
         }
+        catch (...) {
+        LOG_ERROR << "Unknown error in ";
         return false;
+    }
 
 
     }
@@ -69,7 +79,9 @@ using namespace std;
           return vec_user;
       } catch(std::exception const &e) {
                 LOG_ERROR<< "ERROR: " << e.what() ;
-                //异常终止程序
-              
-              }
+                return std::vector<User>{};   
+       } catch (...) {
+        LOG_ERROR << "Unknown error in ";
+        return std::vector<User>{};
+    }
     }

@@ -67,13 +67,13 @@ void Server::on_connection(const TcpConnectionPtr &conn)
 
     LOG_INFO<<"有socket新连接";
       
-    
 
 }
 
 //上报读写时间相关信息的回调函数
 void Server::on_message(const TcpConnectionPtr &conn, Buffer *buffer, Timestamp time)
 {
+try{
     string buf = buffer->retrieveAllAsString();
                                                          LOG_DEBUG<<"exute: "<<buf;
     Json::Reader reader;
@@ -83,25 +83,31 @@ void Server::on_message(const TcpConnectionPtr &conn, Buffer *buffer, Timestamp 
     //通过js里面的msgid，绑定msgid的回调函数，获取业务处理器handler
     auto  msg_handler= ChatService::instance().get_handler(root["msg_id"].asInt());//返回service对象     
        (*msg_handler)(conn, root["msg_value"], time);
+     
   }
-  //如果不是注册消息，就重置conn为onTimeout_logined
-   if(!(ServerMessage::REG_MSG==static_cast<ServerMessage>(root["msg_id"].asInt()))){
-        TimerId timerId = boost::any_cast<TimerId>(conn->getContext());
+    //如果是注册消息，就重置conn为onTimeout_logined
+     if(ServerMessage::REG_MSG==static_cast<ServerMessage>(root["msg_id"].asInt())){
+          TimerId timerId = boost::any_cast<TimerId>(conn->getContext());
         conn->getLoop()->cancel(timerId);
-        timerId = conn->getLoop()->runEvery(10, [this, conn] {
-                onTimeout_logined(conn);
-        });
-        conn->setContext(timerId);
-   }
-   else{
-         TimerId timerId = boost::any_cast<TimerId>(conn->getContext());
-        conn->getLoop()->cancel(timerId);
-        timerId = conn->getLoop()->runEvery(10, [this, conn] {
+        timerId = conn->getLoop()->runEvery(20, [this, conn] {
                  onTimeout(conn);
         });
         conn->setContext(timerId);
    }
+   else {
+      
+           TimerId timerId = boost::any_cast<TimerId>(conn->getContext());
+        conn->getLoop()->cancel(timerId);
+        timerId = conn->getLoop()->runEvery(2000, [this, conn] {
+                onTimeout_logined(conn);
+        });
+        conn->setContext(timerId);
+   }
     return;
+}catch (...) {
+        LOG_ERROR << "Unknown error xx_service ";
+        return;
+           }
 }
 //未登录断开连接函数
 void   Server::onTimeout(const TcpConnectionPtr& conn){

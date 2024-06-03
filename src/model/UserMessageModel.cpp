@@ -19,7 +19,10 @@ bool UserMessageModel::insert(UserMessage &usermessage){
                 //异常终止程序
        return false;
         }
+      catch (...) {
+        LOG_ERROR << "Unknown error in ";
         return false;
+    }
 }
 
 
@@ -50,8 +53,11 @@ bool UserMessageModel::insert(UserMessage &usermessage){
       } catch(std::exception const &e) {
                 LOG_ERROR<< "ERROR: " << e.what() ;
                 //异常终止程序
-               
-              }
+                return std::vector<UserMessage>{};
+       }catch (...) {
+        LOG_ERROR << "Unknown error in ";
+        return std::vector<UserMessage>{};
+    }
 
 
  }
@@ -64,8 +70,10 @@ bool UserMessageModel::delete_UserMessage(int Userid){
            return true;
       } catch(std::exception const &e) {
                 LOG_ERROR<< "ERROR: " << e.what() ;
-                //异常终止程序
-        }
+                 return false;
+        }catch (...) {
+        LOG_ERROR << "Unknown error in ";
         return false;
-
+    }
+       
 }

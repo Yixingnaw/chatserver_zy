@@ -25,7 +25,10 @@ bool UnreadGroupMessageModel::insert(UnreadGroupMessage &grouomessage){
                 //异常终止程序
        return false;
         }
+        catch (...) {
+        LOG_ERROR << "Unknown error in ";
         return false;
+    }
 }
 //限定返回一百条群消息。
 std::vector<UnreadGroupMessage> UnreadGroupMessageModel::query(int groupid,int history_number){
@@ -48,9 +51,11 @@ std::vector<UnreadGroupMessage> UnreadGroupMessageModel::query(int groupid,int h
          return vec_;
       } catch(std::exception const &e) {
                 LOG_ERROR<< "ERROR: " << e.what() ;
-                //异常终止程序
-               
-              }
+                return std::vector<UnreadGroupMessage>{};
+        }catch (...) {
+        LOG_ERROR << "Unknown error in ";
+        return std::vector<UnreadGroupMessage>{};
+    }
 
 }
 
