@@ -75,6 +75,8 @@ add_subdirectory(src/service)
 #添加server_chat目录
 add_subdirectory(src/server_chat)
 
+add_subdirectory(src/uitls)
+
 target_link_libraries(server ${muduo_net})
 target_link_libraries(server ${muduo_base})
 
@@ -86,6 +88,7 @@ target_link_libraries(server cppdb)
 target_link_libraries(server model)#model层
 target_link_libraries(server server_chat)
 target_link_libraries(server service)
+target_link_libraries(server uitls)
 
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
