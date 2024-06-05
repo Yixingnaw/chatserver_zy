@@ -10,7 +10,7 @@ using namespace std;
 using namespace placeholders;
 
 //初始化聊天服务器对象
-Server::Server(EventLoop *loop, const InetAddress &listenAddr, const std::string &nameArg)
+Server::Server(EventLoop    *loop, const InetAddress &listenAddr, const std::string &nameArg)
     : server_(loop, listenAddr, nameArg),
       loop_(loop)
 {
@@ -94,11 +94,11 @@ try{
         });
         conn->setContext(timerId);
    }
-   else {
+   else {  //其他消息，心跳包或者啥，客户端登陆之后才开启心跳包文
       
            TimerId timerId = boost::any_cast<TimerId>(conn->getContext());
         conn->getLoop()->cancel(timerId);
-        timerId = conn->getLoop()->runEvery(2000, [this, conn] {
+        timerId = conn->getLoop()->runEvery(200, [this, conn] {
                 onTimeout_logined(conn);
         });
         conn->setContext(timerId);
