@@ -60,7 +60,7 @@ void Server::on_connection(const TcpConnectionPtr &conn)
      }
     }
     //第一次新连接
-     auto timerId = conn->getLoop()->runEvery(10, [this, conn] {
+     auto timerId = conn->getLoop()->runEvery(200, [this, conn] {
                 onTimeout(conn);
             });
         conn->setContext(timerId); // 保存定时器 ID 到连接上下文中
@@ -89,7 +89,7 @@ try{
      if(ServerMessage::REG_MSG==static_cast<ServerMessage>(root["msg_id"].asInt())){
           TimerId timerId = boost::any_cast<TimerId>(conn->getContext());
         conn->getLoop()->cancel(timerId);
-        timerId = conn->getLoop()->runEvery(20, [this, conn] {
+        timerId = conn->getLoop()->runEvery(200, [this, conn] {
                  onTimeout(conn);
         });
         conn->setContext(timerId);
@@ -98,7 +98,7 @@ try{
       
            TimerId timerId = boost::any_cast<TimerId>(conn->getContext());
         conn->getLoop()->cancel(timerId);
-        timerId = conn->getLoop()->runEvery(200, [this, conn] {
+        timerId = conn->getLoop()->runEvery(7200, [this, conn] {
                 onTimeout_logined(conn);
         });
         conn->setContext(timerId);

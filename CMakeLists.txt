@@ -1,5 +1,5 @@
-cmake_minimum_required(VERSION 3.0.0)
-project(server VERSION 0.1.0 LANGUAGES C CXX)
+cmake_minimum_required(VERSION 3.10)
+project(server)
 
 add_compile_options(-finput-charset=UTF-8)
 
@@ -49,8 +49,8 @@ set(CPPDB_MYSQL_LIB_PATH "${CMAKE_CURRENT_SOURCE_DIR}/lib")
 # 查找 第三方库 库路径
 find_library(Muduo_NET_LIBRARY libmuduo_net.a PATHS "${MUDUO_LIB_PATH}")
 find_library(Muduo_BASE_LIBRARY libmuduo_base.a PATHS "${MUDUO_LIB_PATH}")
-find_library(CPPDB_LIBRARY libcppdb.a PATHS "${CPPDB_LIB_PATH}")
-find_library(CPPDB_MYSQL_LIBRARY libcppdb_mysql.a PATHS "${CPPDB_MYSQL_LIB_PATH}")
+find_library(CPPDB_LIBRARY  NAMES libcppdb.so.1 PATHS "${CPPDB_LIB_PATH}")
+find_library(CPPDB_MYSQL_LIBRARY NAMES libcppdb_mysql.so.1 PATHS "${CPPDB_MYSQL_LIB_PATH}")
 # 检查库文件是否找到
 if(NOT CPPDB_LIBRARY)
     message("Could not find cppdb library in ${CPPDB_LIB_DIR}")
@@ -96,32 +96,12 @@ target_link_libraries(server pthread rt)
 target_link_libraries(server mysqlclient)
 #本项目需要的第三方库，需要自行编译，在lib下面给出
 target_link_libraries(server ${Muduo_NET_LIBRARY} ${Muduo_BASE_LIBRARY})
-target_link_libraries(server ${CPPDB_LIBRARY})
 target_link_libraries(server ${CPPDB_MYSQL_LIBRARY})
-
-set(CPACK_PROJECT_NAME ${PROJECT_NAME})
-set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
-include(CPack)
-
-
-
-target_link_libraries(server model)#model层
-target_link_libraries(server server_chat)
-target_link_libraries(server service)
-target_link_libraries(server uitls)
-
-
-
-# 链接 第三方库,需要安装的系统第三方库
-target_link_libraries(server ${Boost_LIBRARIES})
-target_link_libraries(server pthread rt)
-#target_link_libraries(server mysqlclient)
-#本项目需要的第三方库，需要自行编译，在lib下面给出
-target_link_libraries(server ${Muduo_NET_LIBRARY} ${Muduo_BASE_LIBRARY})
 target_link_libraries(server ${CPPDB_LIBRARY})
-target_link_libraries(server ${CPPDB_MYSQL_LIBRARY})
 
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
+
+
 include(CPack)
