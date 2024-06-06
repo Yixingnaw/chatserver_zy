@@ -22,16 +22,16 @@
 #include"uitls/uitls.h"
 #include <sys/stat.h>
   //连接数据库，初始化数据库连接池4
- std::string connection_string("mysql:database=server;user=root;password='511304Woaini@'"); 
-  cppdb::pool::pointer my_pool = cppdb::pool::create(connection_string);
-  //muduo::AsyncLogging asyncLog("./logs/muduo_log1", 500*1000*1000);
+ std::string connection_string("mysql:database=server;user=root;password='511304Woaini@'");
+  cppdb::pool::pointer my_pool = cppdb::pool::create(connection_string); 
+  muduo::AsyncLogging asyncLog("./logs/muduo_log1", 500*1000*1000);
 int main()
 {
     std::string logDir = "./logs";
     mkdir(logDir.c_str(), 0777); 
-  //    asyncLog.start();
-   // muduo::Logger::setOutput( uitls::asyncOutput);
-     muduo::Logger::setLogLevel(muduo::Logger::DEBUG);
+     asyncLog.start();
+    muduo::Logger::setOutput( uitls::asyncOutput);
+     muduo::Logger::setLogLevel(muduo::Logger::INFO);
       //测试功能函数,不写上会链接不上为啥子
       {
       auto sql=db_connector(my_pool);

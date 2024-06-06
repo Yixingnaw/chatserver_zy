@@ -47,11 +47,14 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
 # 设置第三方库路径
 set(MUDUO_LIB_PATH "${CMAKE_CURRENT_SOURCE_DIR}/lib")
 set(CPPDB_LIB_PATH "${CMAKE_CURRENT_SOURCE_DIR}/lib")
+set(CPPDB_MYSQL_LIB_PATH "${CMAKE_CURRENT_SOURCE_DIR}/lib")
 
 # 查找 第三方库 库路径
 find_library(Muduo_NET_LIBRARY libmuduo_net.a PATHS "${MUDUO_LIB_PATH}")
 find_library(Muduo_BASE_LIBRARY libmuduo_base.a PATHS "${MUDUO_LIB_PATH}")
 find_library(CPPDB_LIBRARY libcppdb.a PATHS "${CPPDB_LIB_PATH}")
+find_library(CPPDB_MYSQL_LIBRARY libcppdb_mysql.a PATHS "${CPPDB_MYSQL_LIB_PATH}")
+
 
 include_directories(${Boost_INCLUDE_DIRS})#boost库头文件
 include_directories(${PROJECT_SOURCE_DIR})
@@ -85,7 +88,7 @@ target_link_libraries(server pthread rt)
 target_link_libraries(server mysqlclient)
 #本项目需要的第三方库，需要自行编译，在lib下面给出
 target_link_libraries(server ${Muduo_NET_LIBRARY} ${Muduo_BASE_LIBRARY})
-target_link_libraries(server ${CPPDB_LIBRARY})
+target_link_libraries(server ${CPPDB_LIBRARY} ${CPPDB_MYSQL_LIBRARY})
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
