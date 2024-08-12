@@ -24,13 +24,13 @@
   //连接数据库，初始化数据库连接池4
  std::string connection_string("mysql:database=server;user=root;password='511304Woaini@'");
   cppdb::pool::pointer my_pool = cppdb::pool::create(connection_string); 
-  muduo::AsyncLogging asyncLog("./logs/muduo_log1", 500*1000*1000);
+ muduo::AsyncLogging asyncLog("./logs/muduo_log1", 500*1000*1000);
 int main()
 {
     std::string logDir = "./logs";
     mkdir(logDir.c_str(), 0777); 
      asyncLog.start();
-    muduo::Logger::setOutput( uitls::asyncOutput);
+//   muduo::Logger::setOutput( chatserver_uitls::asyncOutput);
      muduo::Logger::setLogLevel(muduo::Logger::INFO);
       //测试功能函数,不写上会链接不上为啥子
       {
@@ -56,7 +56,7 @@ int main()
     UserMessage_consumerThread.detach();
 
     EventLoop loop; //epoll
-    InetAddress addr2("192.168.124.14", 9997);
+    InetAddress addr2("192.168.124.14", 9999);
     Server server2(&loop,addr2,"chatserver2");
     server2.start(); //启动服务：listenfd通过epoll_ctl添加到epoll上    loop.loop(); //类似于epoll_wait以阻塞的方式等待新用户连接或处理已连接用户的读写事件
     loop.loop();

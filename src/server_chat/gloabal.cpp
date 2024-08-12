@@ -1,6 +1,5 @@
 #include"gloab/gloabal.h"
 #include"gloab/MessageQueue.h"
-#include"uitls/uitls.h"
 #include<string>
 
 ThreadSafeMap<int,muduo::net::TcpConnectionPtr> user_connection_map;
