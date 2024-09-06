@@ -21,6 +21,7 @@
 #include"gloab/MessageQueue.h"
 #include"uitls/uitls.h"
 #include <sys/stat.h>
+#include "gloab/WebsocketServer.h"
   //连接数据库，初始化数据库连接池4
  std::string connection_string("mysql:database=chatserver;user=root;password='511304Woaini@'");
   cppdb::pool::pointer my_pool = cppdb::pool::create(connection_string); 
@@ -45,7 +46,7 @@ int main()
     UnreadUserMessageModel();
     UnreadGroupMessageModel();
     CreatGroupService();
-    AddGroupService();
+    AddGroupService();    
     GroupchatService();
     message();
       }
